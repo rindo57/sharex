@@ -364,7 +364,8 @@ async def SHARE_LINK(request: Request, session: str = Cookie(None), directory: s
     auth_home_path= auth_home_path.replace("//", "/") if auth_home_path else None
     folder_data = convert_class_to_dict(folder_data, isObject=True, showtrash=False)
     print("final folder: ", folder_data)
-    contents = folder_data.contents
+    contents = folder_data["contents"]
+    print("CRAZY CONTENTS:", contents")
     html = ""
     entries = contents.items()
     folders = sorted(
@@ -912,41 +913,6 @@ async def api_new_folder(request: Request,  session: str = Cookie(None)):
 
    
 
-@app.post("/api/getDirectory2")
-async def api_get_directory(request: Request,  session: str = Cookie(None)):
-    from utils.directoryHandler import DRIVE_DATA
-
-    data = await request.json()
-    is_admin = False
-    if session:
-        try:
-            payload = jwt.decode(session, JWT_SECRET, algorithms=["HS256"])
-            is_admin = True  # Validate payload if necessary
-        except jwt.ExpiredSignatureError:
-            raise HTTPException(status_code=403, detail="Session expired")
-        except jwt.InvalidTokenError:
-            raise HTTPException(status_code=403, detail="Invalid session token")
-            
-    auth = data.get("auth")
-
-    query = data.get("query")
-    if auth:
-        auth = auth.split('/')[0]
-        data["auth"] = auth
-    else:
-        auth = None
-    
-    print("THIS IS AUTH: ", auth)
-    logger.info(f"getFolder {data}")
-    path = data["path"]
-    folder_data, auth_home_path = DRIVE_DATA.get_directory(path, is_admin, auth)
-    print("folder share data - ", folder_data)
-    auth_home_path= auth_home_path.replace("//", "/") if auth_home_path else None
-    folder_data = convert_class_to_dict(folder_data, isObject=True, showtrash=False)
-    print("final folder: ", folder_data)
-    return JSONResponse(
-            {"status": "ok", "data": folder_data, "auth_home_path": auth_home_path}
-        )
 
 @app.post("/api/getDirectory")
 async def api_get_directory(request: Request,  session: str = Cookie(None)):
