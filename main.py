@@ -689,7 +689,7 @@ async def generate_link_page(request: Request):
     line-height: 1;
     vertical-align: middle;
     text-align: left;
-    border-radius: 15px;
+    border-radius: 10px;
     margin-left: 2px;
     
     margin-bottom: .5rem;
