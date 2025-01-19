@@ -707,7 +707,7 @@ async def generate_link_page(request: Request):
       <p><i class="fas fa-user icon"></i>{uploader}</p>
       <p><i class="fas fa-compact-disc icon"></i>{filesize}</p>
       <p><i class="fas fa-info-circle icon"></i><a href={media_info} target="_blank">Media Info</a></p>
-      <p><i class="material-icons" style="color:#ff79c6">error</i>{idm}</p>
+      <p><i class="fas fa-rocket icon"></i>{idm}</p>
     </div>
 
     <!-- Stats Section -->
