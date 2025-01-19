@@ -51,7 +51,13 @@ class File:
         path: str,
         rentry_link: str, 
         paste_url: str,
-        uploader: str
+        uploader: str, 
+        audio: str,
+        subtitle: str,
+        resolution: str,
+        codec: str,
+        bit_depth: str,
+        duration: str
     ) -> None:
         self.name = name
         self.type = type
@@ -65,7 +71,12 @@ class File:
         self.rentry_link = rentry_link
         self.paste_url = paste_url
         self.uploader = uploader
-        
+        self.audio = audio
+        self.subtitle = subtitle
+        self.resolution = resolution
+        self.codec = codec
+        self.bit_depth = bit_depth
+        self.duration = duration
 
 
 class NewDriveData:
@@ -96,10 +107,10 @@ class NewDriveData:
 
         self.save()
 
-    def new_file(self, path: str, name: str, file_id: int, size: int, rentry_link: str, paste_url: str, uploader: str) -> None:
+    def new_file(self, path: str, name: str, file_id: int, size: int, rentry_link: str, paste_url: str, uploader: str, audio: str, subtitle: str, resolution: str, codec: str, bit_depth: str, duration: str) -> None:
         logger.info(f"Creating new file {name} in {path} by {uploader}")
 
-        file = File(name, file_id, size, path, rentry_link, paste_url, uploader)
+        file = File(name, file_id, size, path, rentry_link, paste_url, uploader, audio, subtitle, resolution, codec, bit_depth, duration)
         if path == "/":
             directory_folder: Folder = self.contents[path]
             directory_folder.contents[file.id] = file
