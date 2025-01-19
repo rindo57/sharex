@@ -364,8 +364,121 @@ async def SHARE_LINK(request: Request, session: str = Cookie(None), directory: s
     auth_home_path= auth_home_path.replace("//", "/") if auth_home_path else None
     folder_data = convert_class_to_dict(folder_data, isObject=True, showtrash=False)
     print("final folder: ", folder_data)
+    contents = folder_data.contents
+    html = ""
+    entries = contents.items()
+    folders = sorted(
+        [(key, value) for key, value in entries if value.type == "folder"],
+        key=lambda x: x[1].name
+    )
+    files = sorted(
+        [(key, value) for key, value in entries if value.type == "file"],
+        key=lambda x: x[1].name
+    )
+
+    for key, item in folders:
+        html += f'<tr data-path="{item.path}" data-id="{item.id}" class="body-tr folder-tr">'
+        html += f'<td><div class="file-tr"><i class="fas fa-folder icon"></i> {item.name}</div></td>'
+        html += '<td><div class="td-align"></div></td>'
+        html += '<td><div class="download-btn"></div></td></tr>'
+    for key, item in files:
+        size = convert_bytes(item.size or 0)
+        html += f'<tr data-path="{item.path}" data-id="{item.id}" data-name="{item.name}" class="body-tr file-tr">'
+        html += f'<td><div class="file-tr"><i class="far fa-file icon"></i> {item.name}</div></td>'
+        html += f'<td><div class="td-align">{size}</div></td>'
+        html += f'<td><div class="td-align"><a href="#" data-path="{item.path}" data-id="{item.id}" data-name="{item.name}" class="download-btn"><i class="fas fa-download icon"></i></a></div></td></tr>'
     # Your logic here (e.g., generating a link or rendering a page)
-    return HTMLResponse(content=f"{folder_data}")
+    directorydata = html
+    return HTMLResponse(content=f"""
+    <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AniDL Drive</title>
+    <link rel="icon" href="https://i.kek.sh/VmxAh7g4wD1.png" type="image/png">
+    <link rel="stylesheet" href="static/home.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <!-- Sidebar Start -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="https://anidl.org"><img src="https://i.kek.sh/GVHR4Bjb9uO.png" /></a>
+                <span></span>
+            </div>
+
+        
+
+            <div class="sidebar-menu">
+                <a class="selected-item" href="/?path=/"><img src="static/assets/home-icon.svg" />Home</a>
+            </div>
+        </div>
+        <!-- Sidebar End -->
+
+        <button id="hamburger-menu" class="hamburger" onclick="toggleSidebar()">☰</button>
+        <div id="bg-blur" class="bg-blur"></div>
+
+
+        <!-- Main Content Start -->
+        <div class="main-content">
+            <div class="header">
+                <div class="search-bar">
+                    <img src="static/assets/search-icon.svg" />
+                    <form id="search-form">
+                        <input id="file-search" type="text" placeholder="Search in Drive" autocomplete="off" />
+                    </form>
+                </div>
+            </div>
+
+            <div class="directory">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>File Size</th>
+                            <th>Download</th>
+                            <th>More</th>
+                        </tr>
+                    </thead>
+                    <tbody id={directorydata}></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- Footer Start -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>© 2024 AniDL. All rights reserved.</p>
+            <p><a href="/contact">Contact</a> | <a href="/dmca">DMCA</a> | <a href="/terms">Terms of Service</a></p>
+        </div>
+    </footer>
+    <!-- Footer End -->
+    <script src="static/js/extra.js"></script>
+    <script src="static/js/apiHandler.js"></script>
+    <script src="static/js/sidebar.js"></script>
+    <script src="static/js/fileClickHandler.js"></script>
+    <script src="static/js/main.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Snowstorm/20131208/snowstorm-min.js"></script>
+
+<script>
+	snowStorm.snowColor = '#FFF';
+	snowStorm.flakesMax = 128;
+	snowStorm.flakesMaxActive = 96;
+	snowStorm.useTwinkleEffect = 1;
+	snowStorm.followMouse = 0;
+	snowStorm.snowStick = 1;
+	snowStorm.animationInterval = 35;
+	snowStorm.excludeMobile = 0;
+	snowStorm.zIndex = 9999;
+</script>
+</body>
+
+</html>
+""")
 @app.get("/f", response_class=HTMLResponse)
 async def generate_link_page(request: Request):
     from utils.directoryHandler import DRIVE_DATA
