@@ -17,13 +17,23 @@ async function getVisitorIp() {
         console.error("Error fetching IP:", error);
     }
 }
+document.getElementById("search-form").addEventListener("submit", function(event) {
+        const userInput = document.getElementById("file-search").value.trim();
+        if (userInput !== "") {
+            // Update form action with the user input query
+            this.action =  getSharePath() + `&query=${encodeURIComponent(userInput)}`;
+        } else {
+            event.preventDefault(); // Prevent submission if input is empty
+            alert("Please enter a search term.");
+        }
+    });
 
 function updateAction(event) {
     event.preventDefault(); // Prevent the form from submitting immediately
     const userInput = document.getElementById("file-search").value;
     if (userInput.trim() !== "") {
         const form = document.getElementById("search-form");
-        form.action = getSharePath() + `&query=${encodeURIComponent(userInput)}`;
+        form.action =
         form.submit(); // Submit the form with the updated action
     } else {
         alert("Please enter a search term.");
