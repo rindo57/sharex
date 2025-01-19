@@ -345,110 +345,121 @@ def convert_bytes(size: int) -> str:
 @app.get("/share", response_class=HTMLResponse)
 async def SHARE_LINK(request: Request, session: str = Cookie(None), directory: str = None, auth: str = None, query: str = None):
     from utils.directoryHandler import DRIVE_DATA
+
     if not directory or not auth:
         raise HTTPException(status_code=403, detail="Unauthorized!")
-    data = { 'path': directory, 'auth': auth, 'query': query }
-    print("folder: ", directory)
-    print("auth: ", auth)
+
+    data = {'path': directory, 'auth': auth, 'query': query}
+    print("folder:", directory)
+    print("auth:", auth)
 
     is_admin = False
-            
     auth = data.get("auth")
-
     query = data.get("query")
+
     if auth:
         auth = auth.split('/')[0]
         data["auth"] = auth
     else:
         auth = None
-    
-    print("THIS IS AUTH: ", auth)
+
+    print("THIS IS AUTH:", auth)
     logger.info(f"getFolder {data}")
     homeurl = f"/share?directory={directory}&auth={auth}"
-    if query:
-      path = data["path"]
-      print("query: ", query)
-               # auth = data["path"].split('=')[1].split('/')[0] 
-      print("THIS AUTH", auth)
-      data, auth_home_path = DRIVE_DATA.get_directory(path, is_admin, auth)
-      print("fdata: ", fdata)
-      print("auth home path: ", auth_home_path)
-      auth_home_path= auth_home_path.replace("//", "/") if auth_home_path else None
 
-      folder = convert_class_to_dict(fdata, isObject=True, showtrash=False)
-      def traverse_directory(folder, query):
-        search_results = {}
-        for item in folder.values():
-          if query.lower() in item["name"].lower():
-            search_results[item['id']] = item
+    if query:
+        path = data["path"]
+        print("query:", query)
+        print("THIS AUTH:", auth)
+
+        fdata, auth_home_path = DRIVE_DATA.get_directory(path, is_admin, auth)
+        print("fdata:", fdata)
+        print("auth home path:", auth_home_path)
+
+        auth_home_path = auth_home_path.replace("//", "/") if auth_home_path else None
+        folder = convert_class_to_dict(fdata, isObject=True, showtrash=False)
+
+        def traverse_directory(folder, query):
+            search_results = {}
+            for item in folder.values():
+                if query.lower() in item["name"].lower():
+                    search_results[item['id']] = item
+                search_results.update(traverse_directory(item.get('contents', {}), query))
             return search_results
-            search_data = traverse_directory(folder['contents'], query)
-            finaldata =  {"contents": search_data}
-            print("share seach folder data:", finaldata)
+
+        search_data = traverse_directory(folder['contents'], query)
+        finaldata = {"contents": search_data}
+        print("share search folder data:", finaldata)
+
         entries = finaldata.items()
-	      html = ""
-	      folders = sorted(
-	        [(key, value) for key, value in entries if value.get("type") == "folder"],
-	        key=lambda x: x[1].get("name", "").lower()  # Default to empty string and ensure case-insensitivity
-	      )
-	      files = sorted(
-	        [(key, value) for key, value in entries if value.get("type") == "file"],
-	        key=lambda x: x[1].get("name", "").lower()  # Default to empty string and ensure case-insensitivity
-	      )
-	      for key, item in folders:
-	        html += (
-	          f'<tr data-path="{item.get("path")}" data-id="{item.get("id")}" class="body-tr folder-tr">'
-	          f'<td><div class="file-tr"><i class="fas fa-folder icon"></i> {item.get("name")}</div></td>'
-	          '<td><div class="td-align"></div></td>'
-            '<td><div class="download-btn"></div></td></tr>'
-         )
+        html = ""
+
+        folders = sorted(
+            [(key, value) for key, value in entries if value.get("type") == "folder"],
+            key=lambda x: x[1].get("name", "").lower()
+        )
+        files = sorted(
+            [(key, value) for key, value in entries if value.get("type") == "file"],
+            key=lambda x: x[1].get("name", "").lower()
+        )
+
+        for key, item in folders:
+            html += (
+                f'<tr data-path="{item.get("path")}" data-id="{item.get("id")}" class="body-tr folder-tr">'
+                f'<td><div class="file-tr"><i class="fas fa-folder icon"></i> {item.get("name")}</div></td>'
+                '<td><div class="td-align"></div></td>'
+                '<td><div class="download-btn"></div></td></tr>'
+            )
         for key, item in files:
-          size = convert_bytes(item.get("size", 0))
-          html += (
-            f'<tr data-path="{item.get("path")}" data-id="{item.get("id")}" data-name="{item.get("name")}" class="body-tr file-tr">'
-            f'<td><div class="file-tr"><i class="far fa-file icon"></i> {item.get("name")}</div></td>'
-            f'<td><div class="td-align">{size}</div></td>'
-            f'<td><div class="td-align"><a href="#" data-path="{item.get("path")}" data-id="{item.get("id")}" data-name="{item.get("name")}" class="download-btn">'
-            f'<i class="fas fa-download icon"></i></a></div></td></tr>'
-        )
-        
+            size = convert_bytes(item.get("size", 0))
+            html += (
+                f'<tr data-path="{item.get("path")}" data-id="{item.get("id")}" data-name="{item.get("name")}" class="body-tr file-tr">'
+                f'<td><div class="file-tr"><i class="far fa-file icon"></i> {item.get("name")}</div></td>'
+                f'<td><div class="td-align">{size}</div></td>'
+                f'<td><div class="td-align"><a href="#" data-path="{item.get("path")}" data-id="{item.get("id")}" data-name="{item.get("name")}" class="download-btn">'
+                f'<i class="fas fa-download icon"></i></a></div></td></tr>'
+            )
+
     else:
-      path = data["path"]
-      folder_data, auth_home_path = DRIVE_DATA.get_directory(path, is_admin, auth)
-      print("folder share data - ", folder_data)
-      auth_home_path= auth_home_path.replace("//", "/") if auth_home_path else None
-      folder_data = convert_class_to_dict(folder_data, isObject=True, showtrash=False)
-      print("final folder: ", folder_data)
-      contents = folder_data["contents"]
-      print("CRAZY CONTENTS:", contents)
-      html = ""
-      entries = contents.items()
-      folders = sorted(
-        [(key, value) for key, value in entries if value.get("type") == "folder"],
-        key=lambda x: x[1].get("name", "").lower()  # Default to empty string and ensure case-insensitivity
-      )
-      files = sorted(
-        [(key, value) for key, value in entries if value.get("type") == "file"],
-        key=lambda x: x[1].get("name", "").lower()  # Default to empty string and ensure case-insensitivity
-      )
-      
-      for key, item in folders:
-        html += (
-            f'<tr data-path="{item.get("path")}" data-id="{item.get("id")}" class="body-tr folder-tr">'
-            f'<td><div class="file-tr"><i class="fas fa-folder icon"></i> {item.get("name")}</div></td>'
-            '<td><div class="td-align"></div></td>'
-            '<td><div class="download-btn"></div></td></tr>'
+        path = data["path"]
+        folder_data, auth_home_path = DRIVE_DATA.get_directory(path, is_admin, auth)
+        print("folder share data:", folder_data)
+
+        auth_home_path = auth_home_path.replace("//", "/") if auth_home_path else None
+        folder_data = convert_class_to_dict(folder_data, isObject=True, showtrash=False)
+        print("final folder:", folder_data)
+
+        contents = folder_data["contents"]
+        print("CRAZY CONTENTS:", contents)
+        html = ""
+
+        entries = contents.items()
+        folders = sorted(
+            [(key, value) for key, value in entries if value.get("type") == "folder"],
+            key=lambda x: x[1].get("name", "").lower()
         )
-      for key, item in files:
-        size = convert_bytes(item.get("size", 0))
-        html += (
-            f'<tr data-path="{item.get("path")}" data-id="{item.get("id")}" data-name="{item.get("name")}" class="body-tr file-tr">'
-            f'<td><div class="file-tr"><i class="far fa-file icon"></i> {item.get("name")}</div></td>'
-            f'<td><div class="td-align">{size}</div></td>'
-            f'<td><div class="td-align"><a href="#" data-path="{item.get("path")}" data-id="{item.get("id")}" data-name="{item.get("name")}" class="download-btn">'
-            f'<i class="fas fa-download icon"></i></a></div></td></tr>'
+        files = sorted(
+            [(key, value) for key, value in entries if value.get("type") == "file"],
+            key=lambda x: x[1].get("name", "").lower()
         )
-      
+
+        for key, item in folders:
+            html += (
+                f'<tr data-path="{item.get("path")}" data-id="{item.get("id")}" class="body-tr folder-tr">'
+                f'<td><div class="file-tr"><i class="fas fa-folder icon"></i> {item.get("name")}</div></td>'
+                '<td><div class="td-align"></div></td>'
+                '<td><div class="download-btn"></div></td></tr>'
+            )
+        for key, item in files:
+            size = convert_bytes(item.get("size", 0))
+            html += (
+                f'<tr data-path="{item.get("path")}" data-id="{item.get("id")}" data-name="{item.get("name")}" class="body-tr file-tr">'
+                f'<td><div class="file-tr"><i class="far fa-file icon"></i> {item.get("name")}</div></td>'
+                f'<td><div class="td-align">{size}</div></td>'
+                f'<td><div class="td-align"><a href="#" data-path="{item.get("path")}" data-id="{item.get("id")}" data-name="{item.get("name")}" class="download-btn">'
+                f'<i class="fas fa-download icon"></i></a></div></td></tr>'
+            )
+
     directorydata = html
     return HTMLResponse(content=f"""
 <!DOCTYPE html>
