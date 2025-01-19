@@ -398,11 +398,13 @@ async def SHARE_LINK(request: Request, session: str = Cookie(None), directory: s
             [(key, value) for key, value in entries if value.get("type") == "folder"],
             key=lambda x: x[1].get("name", "").lower()
         )
+
+        print("folders ", folders)
         files = sorted(
             [(key, value) for key, value in entries if value.get("type") == "file"],
             key=lambda x: x[1].get("name", "").lower()
         )
-
+        print("files ", files)
         for key, item in folders:
             html += (
                 f'<tr data-path="{item.get("path")}" data-id="{item.get("id")}" class="body-tr folder-tr">'
@@ -434,6 +436,8 @@ async def SHARE_LINK(request: Request, session: str = Cookie(None), directory: s
         print("CRAZY CONTENTS:", contents)
 
         entries = contents.items()
+        
+        print("share entries: ", entries)
         folders = sorted(
             [(key, value) for key, value in entries if value.get("type") == "folder"],
             key=lambda x: x[1].get("name", "").lower()
