@@ -473,11 +473,7 @@ async def SHARE_LINK(request: Request, session: str = Cookie(None), directory: s
         </div>
     </footer>
     <!-- Footer End -->
-    <script src="static/js/extra.js"></script>
-    <script src="static/js/apiHandler.js"></script>
-    <script src="static/js/sidebar.js"></script>
     <script src="static/js/fileClickHandler.js"></script>
-    <script src="static/js/main.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Snowstorm/20131208/snowstorm-min.js"></script>
 
 <script>
