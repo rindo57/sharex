@@ -364,38 +364,82 @@ async def SHARE_LINK(request: Request, session: str = Cookie(None), directory: s
     
     print("THIS IS AUTH: ", auth)
     logger.info(f"getFolder {data}")
-    path = data["path"]
-    folder_data, auth_home_path = DRIVE_DATA.get_directory(path, is_admin, auth)
-    print("folder share data - ", folder_data)
-    auth_home_path= auth_home_path.replace("//", "/") if auth_home_path else None
-    folder_data = convert_class_to_dict(folder_data, isObject=True, showtrash=False)
-    print("final folder: ", folder_data)
-    contents = folder_data["contents"]
-    print("CRAZY CONTENTS:", contents)
-    html = ""
-    entries = contents.items()
-    folders = sorted(
-	[(key, value) for key, value in entries if value.get("type") == "folder"],
-    	key=lambda x: x[1].get("name", "").lower()  # Default to empty string and ensure case-insensitivity
-     )
+    homeurl = f"/share?directory={directory}&auth={auth}"
+    if query:
+      path = data["path"]
+      print("query: ", query)
+               # auth = data["path"].split('=')[1].split('/')[0] 
+      print("THIS AUTH", auth)
+      data, auth_home_path = DRIVE_DATA.get_directory(path, is_admin, auth)
+      print("fdata: ", fdata)
+      print("auth home path: ", auth_home_path)
+      auth_home_path= auth_home_path.replace("//", "/") if auth_home_path else None
 
-# Sorting files based on the "name" key
-    files = sorted(
-    	[(key, value) for key, value in entries if value.get("type") == "file"],
-    	key=lambda x: x[1].get("name", "").lower()  # Default to empty string and ensure case-insensitivity
-	)
-
-    # Render folder rows
-    for key, item in folders:
+      folder = convert_class_to_dict(fdata, isObject=True, showtrash=False)
+      def traverse_directory(folder, query):
+        search_results = {}
+        for item in folder.values():
+          if query.lower() in item["name"].lower():
+            search_results[item['id']] = item
+            return search_results
+            search_data = traverse_directory(folder['contents'], query)
+            finaldata =  {"contents": search_data}
+            print("share seach folder data:", finaldata)
+        entries = finaldata.items()
+	      html = ""
+	      folders = sorted(
+	        [(key, value) for key, value in entries if value.get("type") == "folder"],
+	        key=lambda x: x[1].get("name", "").lower()  # Default to empty string and ensure case-insensitivity
+	      )
+	      files = sorted(
+	        [(key, value) for key, value in entries if value.get("type") == "file"],
+	        key=lambda x: x[1].get("name", "").lower()  # Default to empty string and ensure case-insensitivity
+	      )
+	      for key, item in folders:
+	        html += (
+	          f'<tr data-path="{item.get("path")}" data-id="{item.get("id")}" class="body-tr folder-tr">'
+	          f'<td><div class="file-tr"><i class="fas fa-folder icon"></i> {item.get("name")}</div></td>'
+	          '<td><div class="td-align"></div></td>'
+            '<td><div class="download-btn"></div></td></tr>'
+         )
+        for key, item in files:
+          size = convert_bytes(item.get("size", 0))
+          html += (
+            f'<tr data-path="{item.get("path")}" data-id="{item.get("id")}" data-name="{item.get("name")}" class="body-tr file-tr">'
+            f'<td><div class="file-tr"><i class="far fa-file icon"></i> {item.get("name")}</div></td>'
+            f'<td><div class="td-align">{size}</div></td>'
+            f'<td><div class="td-align"><a href="#" data-path="{item.get("path")}" data-id="{item.get("id")}" data-name="{item.get("name")}" class="download-btn">'
+            f'<i class="fas fa-download icon"></i></a></div></td></tr>'
+        )
+        
+    else:
+      path = data["path"]
+      folder_data, auth_home_path = DRIVE_DATA.get_directory(path, is_admin, auth)
+      print("folder share data - ", folder_data)
+      auth_home_path= auth_home_path.replace("//", "/") if auth_home_path else None
+      folder_data = convert_class_to_dict(folder_data, isObject=True, showtrash=False)
+      print("final folder: ", folder_data)
+      contents = folder_data["contents"]
+      print("CRAZY CONTENTS:", contents)
+      html = ""
+      entries = contents.items()
+      folders = sorted(
+        [(key, value) for key, value in entries if value.get("type") == "folder"],
+        key=lambda x: x[1].get("name", "").lower()  # Default to empty string and ensure case-insensitivity
+      )
+      files = sorted(
+        [(key, value) for key, value in entries if value.get("type") == "file"],
+        key=lambda x: x[1].get("name", "").lower()  # Default to empty string and ensure case-insensitivity
+      )
+      
+      for key, item in folders:
         html += (
             f'<tr data-path="{item.get("path")}" data-id="{item.get("id")}" class="body-tr folder-tr">'
             f'<td><div class="file-tr"><i class="fas fa-folder icon"></i> {item.get("name")}</div></td>'
             '<td><div class="td-align"></div></td>'
             '<td><div class="download-btn"></div></td></tr>'
         )
-
-    # Render file rows
-    for key, item in files:
+      for key, item in files:
         size = convert_bytes(item.get("size", 0))
         html += (
             f'<tr data-path="{item.get("path")}" data-id="{item.get("id")}" data-name="{item.get("name")}" class="body-tr file-tr">'
@@ -404,10 +448,8 @@ async def SHARE_LINK(request: Request, session: str = Cookie(None), directory: s
             f'<td><div class="td-align"><a href="#" data-path="{item.get("path")}" data-id="{item.get("id")}" data-name="{item.get("name")}" class="download-btn">'
             f'<i class="fas fa-download icon"></i></a></div></td></tr>'
         )
-
-    # Set the final HTML for directory data
+      
     directorydata = html
-    homeurl = f"/share?directory={directory}&auth={auth}"
     return HTMLResponse(content=f"""
 <!DOCTYPE html>
 <html lang="en">
