@@ -407,7 +407,7 @@ async def SHARE_LINK(request: Request, session: str = Cookie(None), directory: s
 
     # Set the final HTML for directory data
     directorydata = html
-    homeurl = f"/share?=directory={directory}&auth{auth}"
+    homeurl = f"/share?directory={directory}&auth={auth}"
     return HTMLResponse(content=f"""
     <!DOCTYPE html>
 <html lang="en">
