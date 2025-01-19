@@ -290,7 +290,7 @@ async def start_file_uploader(file_path, id, directory_path, filename, file_size
         print("Subtitle Languages:", infox.get("subtitle_languages"))
         resolution = infox.get("video_resolution")
         print("Video Resolution:", infox.get("video_resolution"))
-        codec = infox.get("codec")
+        codec = infox.get("video_codec")
         print("Video Codec:", infox.get("video_codec"))
         bit_depth = infox.get("video_bit_depth")
         print("Video Bit Depth:", infox.get("video_bit_depth"))
