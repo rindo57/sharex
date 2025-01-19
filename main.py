@@ -448,7 +448,7 @@ async def SHARE_LINK(request: Request, session: str = Cookie(None), directory: s
     				<input 
    			   	  id="file-search" 
    				     type="text" 
-			             name="inputquery" 
+			             name="directory={directory}&auth{auth}&query" 
         			     placeholder="Search in Drive" 
                                      autocomplete="off" 
 				     />
