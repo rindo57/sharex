@@ -688,8 +688,7 @@ async def generate_link_page(request: Request):
     font-weight: 400;
     line-height: 1;
     vertical-align: middle;
-    white-space: nowrap;
-    text-align: center;
+    text-align: left;
     border-radius: 2px;
     margin-left: 2px;
     
@@ -752,13 +751,29 @@ async def generate_link_page(request: Request):
     <!-- File Info Section -->
     <div class="file-info">
       <p><i class="fas fa-file icon"></i> <span>{filename}</p>
+    </div>
+    <div class="file-info">
       <p><i class="fas fa-user icon"></i>{uploader}</p>
+        </div>
+    <div class="file-info">
       <p><i class="fas fa-compact-disc icon"></i>{filesize}</p>
+    </div>
+    <div class="file-info">
       {dur}
+    </div>
+    <div class="file-info">
       {vidinfo}
+    </div>
+    <div class="file-info">
       {audinf}
+    </div>
+    <div class="file-info">
       {subinf}
+    </div>
+    <div class="file-info">
       <p><i class="fas fa-info-circle icon"></i><a href={media_info} target="_blank">Media Info</a></p>
+    </div>
+    <div class="file-info">
       <p><i class="fas fa-rocket icon"></i>{idm}</p>
     </div>
 
