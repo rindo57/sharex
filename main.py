@@ -365,7 +365,7 @@ async def SHARE_LINK(request: Request, session: str = Cookie(None), directory: s
     folder_data = convert_class_to_dict(folder_data, isObject=True, showtrash=False)
     print("final folder: ", folder_data)
     contents = folder_data["contents"]
-    print("CRAZY CONTENTS:", contents")
+    print("CRAZY CONTENTS:", contents)
     html = ""
     entries = contents.items()
     folders = sorted(
