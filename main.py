@@ -335,7 +335,13 @@ async def verify_turnstile_token(response_token: str) -> bool:
         result = response.json()
     return result.get("success", False)
 
-
+def convert_bytes(size: int) -> str:
+    """Convert bytes to a human-readable string."""
+    for unit in ['B', 'KB', 'MB', 'GB', 'TB']:
+        if size < 1024.0:
+            return f"{size:.2f} {unit}"
+        size /= 1024.0
+    return f"{size:.2f} PB"
 @app.get("/share", response_class=HTMLResponse)
 async def SHARE_LINK(request: Request, session: str = Cookie(None), directory: str = None, auth: str = None, query: str = None):
     from utils.directoryHandler import DRIVE_DATA
