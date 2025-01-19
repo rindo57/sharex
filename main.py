@@ -336,11 +336,16 @@ async def verify_turnstile_token(response_token: str) -> bool:
     return result.get("success", False)
 
 
-@app.get("/s?={shareid}&auth={auth}", response_class=HTMLResponse)
-async def generate_link_page(request: Request):
+@app.get("/s", response_class=HTMLResponse)
+async def generate_link_page(request: Request, shareid: str = None, auth: str = None):
+    if not shareid or not auth:
+        raise HTTPException(status_code=403, detail="Unauthorized!")
+    
     print("shareid: ", shareid)
-    print(auth)
-    raise HTTPException(status_code=403, detail="Unauthorized!")
+    print("auth: ", auth)
+    
+    # Your logic here (e.g., generating a link or rendering a page)
+    return HTMLResponse(content=f"Share ID: {shareid}, Auth: {auth}")
 @app.get("/f", response_class=HTMLResponse)
 async def generate_link_page(request: Request):
     from utils.directoryHandler import DRIVE_DATA
