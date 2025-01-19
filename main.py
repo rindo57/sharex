@@ -604,7 +604,7 @@ async def generate_link_page(request: Request):
     subinf = "" 
     if hasattr(file, 'subtitle') and file.subtitle:
         for y in file.subtitle:
-            subinf = f"""<i class="fa fa-cc" style="color:#ff79c6;"></i><i class='fi fi-{y}'></i>"""
+            subinf = f"""<i class="fa fa-cc" style="color:#ff79c6;"></i> <i class='fi fi-{y}'></i>"""
             print(subinf)
     else:
         subinf = ""   
@@ -625,6 +625,7 @@ async def generate_link_page(request: Request):
   <title>{filename}</title>
     <link rel="icon" href="https://i.kek.sh/VmxAh7g4wD1.png" type="image/png">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/flag-icons/css/flag-icons.min.css" rel="stylesheet">
   <style>
