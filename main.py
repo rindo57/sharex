@@ -591,7 +591,7 @@ async def generate_link_page(request: Request):
     if hasattr(file, 'resolution') and file.resolution:
         if hasattr(file, 'codec') and file.codec:
             if hasattr(file, 'bit_depth') and file.bit_depth:
-                vidinfo = f"""<p><i class="fas fa-video" style="color:#ff79c6"></i>{file.resolution} | {file.codec} | {file.bit_depth}</p>"""
+                vidinfo = f"""<p><i class="fas fa-video" style="color:#ff79c6"></i>{file.resolution}p | {file.codec} | {file.bit_depth} Bit</p>"""
                 print("videoinfo", vidinfo)
     else:
         vidinfo = ""
