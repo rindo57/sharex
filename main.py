@@ -531,7 +531,7 @@ async def SHARE_LINK(request: Request, session: str = Cookie(None), directory: s
     <!-- Footer Start -->
     <footer class="footer">
         <div class="footer-content">
-            <p>© 2024 AniDL. All rights reserved.</p>
+            <p>© 2025 H!-Drive. All rights reserved.</p>
             <p><a href="/contact">Contact</a> | <a href="/dmca">DMCA</a> | <a href="/terms">Terms of Service</a></p>
         </div>
     </footer>
