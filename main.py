@@ -366,7 +366,7 @@ async def SHARE_LINK(request: Request, session: str = Cookie(None), directory: s
     print("THIS IS AUTH:", auth)
     logger.info(f"getFolder {data}")
     homeurl = f"/share?directory={directory}&auth={auth}"
-
+    html = ""
     if query:
         path = data["path"]
         print("query:", query)
@@ -392,7 +392,7 @@ async def SHARE_LINK(request: Request, session: str = Cookie(None), directory: s
         print("share search folder data:", finaldata)
 
         entries = finaldata.items()
-        html = ""
+
 
         folders = sorted(
             [(key, value) for key, value in entries if value.get("type") == "folder"],
@@ -431,7 +431,6 @@ async def SHARE_LINK(request: Request, session: str = Cookie(None), directory: s
 
         contents = folder_data["contents"]
         print("CRAZY CONTENTS:", contents)
-        html = ""
 
         entries = contents.items()
         folders = sorted(
@@ -459,7 +458,6 @@ async def SHARE_LINK(request: Request, session: str = Cookie(None), directory: s
                 f'<td><div class="td-align"><a href="#" data-path="{item.get("path")}" data-id="{item.get("id")}" data-name="{item.get("name")}" class="download-btn">'
                 f'<i class="fas fa-download icon"></i></a></div></td></tr>'
             )
-
     directorydata = html
     return HTMLResponse(content=f"""
 <!DOCTYPE html>
