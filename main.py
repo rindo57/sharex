@@ -444,9 +444,15 @@ async def SHARE_LINK(request: Request, session: str = Cookie(None), directory: s
                 <div class="search-bar">
                     <img src="static/assets/search-icon.svg" alt="Search Icon" />
 
-       		     <form id="search-form" action="#" method="get" onsubmit="updateAction(event)">
-    			<input id="file-search" type="text" name="inputquery" placeholder="Search in Drive" autocomplete="off" />
-		     </form>
+			<form id="search-form" action="#" method="get">
+    				<input 
+   			   	  id="file-search" 
+   				     type="text" 
+			             name="inputquery" 
+        			     placeholder="Search in Drive" 
+                                     autocomplete="off" 
+				     />
+	 		</form>
 
                 </div>
             </div>
