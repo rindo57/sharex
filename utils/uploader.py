@@ -17,12 +17,125 @@ import http.cookiejar
 import json
 import re
 import subprocess
+import pycountry
 from utils.humanFunctions import humanBitrate, humanSize, remove_N
 logger = Logger(__name__)
 PROGRESS_CACHE = {}
 STOP_TRANSMISSION = []
 
+def format_duration(duration_in_seconds):
+    """
+    Convert duration from seconds to a readable format "XX min XX s".
 
+    Args:
+        duration_in_seconds (float): Duration in seconds.
+
+    Returns:
+        str: Formatted duration as "XX min XX s".
+    """
+    minutes, seconds = divmod(int(duration_in_seconds), 60)
+    return f"{minutes} min {seconds} s"
+
+def get_country_code_from_language(lang_code):
+    """
+    Map language codes (ISO 639-1 or ISO 639-2) to commonly associated country codes (ISO 3166-1 alpha-2).
+    If no specific mapping exists, return the language code as-is.
+    """
+    # Common mappings from language to country
+    language_to_country = {
+        "ab": "ge", "aa": "et", "af": "za", "ak": "gh", "sq": "al", "am": "et", "ar": "sa", "hy": "am", 
+        "as": "in", "av": "ru", "ae": "ir", "ay": "bo", "az": "az", "bm": "ml", "bn": "bd", "bs": "ba", 
+        "br": "fr", "bg": "bg", "my": "mm", "ca": "es", "ch": "fm", "ce": "ru", "ny": "mw", "zh": "cn", 
+        "cv": "ru", "kw": "gb", "co": "fr", "cr": "ca", "hr": "hr", "cs": "cz", "da": "dk", "dv": "mv", 
+        "nl": "nl", "dz": "bt", "en": "us", "eo": "zz", "et": "ee", "ee": "gh", "tl": "ph", "fi": "fi", 
+        "fo": "fo", "fr": "fr", "ff": "sn", "ka": "ge", "de": "de", "el": "gr", "gn": "py", "gu": "in", 
+        "ht": "ht", "ha": "ng", "he": "il", "hi": "in", "ho": "pg", "hu": "hu", "is": "is", "id": "id", 
+        "ia": "zz", "ie": "zz", "iu": "ca", "ik": "us", "ga": "ie", "it": "it", "ja": "jp", "jw": "id", 
+        "kl": "gl", "kn": "in", "km": "kh", "ko": "kr", "la": "it", "lv": "lv", "la": "it", "lb": "lu", 
+        "lo": "la", "lt": "lt", "mk": "mk", "ml": "in", "mr": "in", "mh": "mh", "mi": "nz", "mn": "mn", 
+        "my": "mm", "ne": "np", "no": "no", "pl": "pl", "pt": "pt", "ps": "af", "qu": "pe", "ro": "ro", 
+        "ru": "ru", "sr": "rs", "si": "lk", "sk": "sk", "sl": "si", "es": "es", "su": "id", "sw": "ke", 
+        "sv": "se", "ta": "in", "tt": "ru", "te": "in", "th": "th", "tr": "tr", "uk": "ua", "ur": "pk", 
+        "uz": "uz", "vi": "vn", "cy": "gb", "xh": "za", "yi": "de", "zu": "za"
+    }
+
+    # If a direct mapping exists, return the country code
+    if lang_code in language_to_country:
+        return language_to_country[lang_code]
+
+    # Try using pycountry for more obscure mappings
+    try:
+        language = pycountry.languages.get(alpha_2=lang_code) or pycountry.languages.get(alpha_3=lang_code)
+        if language:
+            country = pycountry.countries.get(alpha_2=language.alpha_2.upper())
+            if country:
+                return country.alpha_2.lower()
+    except KeyError:
+        pass
+
+    return lang_code  # Return the language code as-is if no mapping exists
+
+
+def get_media_language_info(file_path):
+    """
+    Extracts audio and subtitle language information from a media file using mediainfo.
+
+    Args:
+        file_path (str): Path to the media file.
+
+    Returns:
+        dict: Dictionary with audio and subtitle language info.
+    """
+    cmd = [
+        "mediainfo",
+        "--Output=JSON",
+        file_path
+    ]
+
+    try:
+        result = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True)
+        metadata = json.loads(result.stdout)
+
+        audio_languages = []
+        subtitle_languages = []
+        video_resolution = None
+        video_codec = None
+        video_bit_depth = None
+        duration = None
+        # Navigate through the JSON structure to find audio and subtitle tracks
+        for track in metadata.get("media", {}).get("track", []):
+            if track.get("@type") == "Audio":
+                language = track.get("Language", "unknown")
+                country_code = get_country_code_from_language(language)
+                audio_languages.append(country_code)
+                
+            elif track.get("@type") == "Text":
+                language = track.get("Language", "unknown")
+                country_code = get_country_code_from_language(language)
+                subtitle_languages.append(country_code)
+            elif track.get("@type") == "Video":
+                video_resolution = track.get("Width", "unknown") + "x" + track.get("Height", "unknown")
+                video_codec = track.get("Format", "unknown")
+                video_bit_depth = track.get("BitDepth", "unknown")
+
+                # Format the duration into "XX min XX s"
+                duration = track.get("Duration", "unknown")
+                if duration != "unknown":
+                    duration = format_duration(float(duration))
+
+        return {
+            "audio_languages": audio_languages,
+            "subtitle_languages": subtitle_languages,
+            "video_resolution": video_resolution,
+            "video_codec": video_codec,
+            "video_bit_depth": video_bit_depth,
+            "duration": duration
+        }
+
+    except subprocess.CalledProcessError as e:
+        print(f"Error running mediainfo: {e.stderr.decode('utf-8')}")
+        return {}
+        
 async def progress_callback(current, total, id, client: Client, file_path):
     global PROGRESS_CACHE, STOP_TRANSMISSION
 
@@ -170,6 +283,20 @@ async def start_file_uploader(file_path, id, directory_path, filename, file_size
         print("The pastebin URL is:", paste_url)
         rentry_link = get_rentry_link(content)
         print(rentry_link)
+        infox = get_media_language_info(file_path)
+        audio = infox.get("audio_languages")
+        print("Audio Languages:", infox.get("audio_languages"))
+        subtitle = infox.get("subtitle_languages")
+        print("Subtitle Languages:", infox.get("subtitle_languages"))
+        resolution = infox.get("video_resolution")
+        print("Video Resolution:", infox.get("video_resolution"))
+        codec = infox.get("codec")
+        print("Video Codec:", infox.get("video_codec"))
+        bit_depth = infox.get("video_bit_depth")
+        print("Video Bit Depth:", infox.get("video_bit_depth"))
+        duration = infox.get("duration")
+        print("Duration:", infox.get("duration"))
+        
     elif filename.endswith(".mp4"):
         media_details = format_media_info(file_path, file_size)
         content = f"Media Info:\n\n{media_details}"
@@ -178,6 +305,19 @@ async def start_file_uploader(file_path, id, directory_path, filename, file_size
         print("The pastebin URL is:", paste_url)
         rentry_link = get_rentry_link(content)
         print(rentry_link)
+        infox = get_media_language_info(file_path)
+        audio = infox.get("audio_languages")
+        print("Audio Languages:", infox.get("audio_languages"))
+        subtitle = infox.get("subtitle_languages")
+        print("Subtitle Languages:", infox.get("subtitle_languages"))
+        resolution = infox.get("video_resolution")
+        print("Video Resolution:", infox.get("video_resolution"))
+        codec = infox.get("codec")
+        print("Video Codec:", infox.get("video_codec"))
+        bit_depth = infox.get("video_bit_depth")
+        print("Video Bit Depth:", infox.get("video_bit_depth"))
+        duration = infox.get("duration")
+        print("Duration:", infox.get("duration"))
     else:
         rentry_link = "https://rentry.co/404"
 
@@ -207,7 +347,7 @@ async def start_file_uploader(file_path, id, directory_path, filename, file_size
 
     filename = unquote_plus(filename)
 
-    DRIVE_DATA.new_file(directory_path, filename, message.id, size, rentry_link, paste_url, uploader)
+    DRIVE_DATA.new_file(directory_path, filename, message.id, size, rentry_link, paste_url, uploader, audio, subtitle, resolution, codec, bit_depth, duration)
     PROGRESS_CACHE[id] = ("completed", size, size)
 
     if os.path.exists(file_path):
