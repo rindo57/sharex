@@ -381,10 +381,16 @@ async def SHARE_LINK(request: Request, session: str = Cookie(None), directory: s
 
         def traverse_directory(folder, query):
             search_results = {}
+            keywords = query.lower().split()  # Split query into individual keywords
+
             for item in folder.values():
-                if query.lower() in item["name"].lower():
+                item_name = item["name"].lower()
+        # Check if all keywords are present in the item name
+                if all(keyword in item_name for keyword in keywords):
                     search_results[item['id']] = item
+        # Recursively search in subdirectories
                 search_results.update(traverse_directory(item.get('contents', {}), query))
+    
             return search_results
 
         search_data = traverse_directory(folder['contents'], query)
