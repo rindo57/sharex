@@ -344,7 +344,7 @@ async def generate_link_page(request: Request, directory: str = None, auth: str 
     print("folder: ", directory)
     print("auth: ", auth)
     async with httpx.AsyncClient() as client:
-        response = await client.post("http://localhost:80/getdirectory", json=data)
+        response = await client.post("http://localhost:80/getDirectory2", json=data)
         result = response.json()
     print("Result: ", result)
     # Your logic here (e.g., generating a link or rendering a page)
