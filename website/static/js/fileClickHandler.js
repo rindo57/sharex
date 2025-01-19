@@ -35,12 +35,12 @@ document.getElementById('search-form').addEventListener('submit', function (even
         return;
     }
 
-    let currentPath = getSharePath();  // Function to get the current path
+    let currentPath = 'http://72.144.240.210/share?directory=/LyNQJipyNVWJZJp&auth=MUqtGVs4COm3qp9'  // Function to get the current path
     let path;
 
     // Check if the current path starts with "/share_"
 
-    currentPath = currentPath.replace(/\/query_.+$/, '');  // Remove any query after "/share_"
+  //  currentPath = currentPath.replace(/\/query_.+$/, '');  // Remove any query after "/share_"
     path = currentPath + '&query=' + encodeURIComponent(query);
     
 
