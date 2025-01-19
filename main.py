@@ -336,16 +336,19 @@ async def verify_turnstile_token(response_token: str) -> bool:
     return result.get("success", False)
 
 
-@app.get("/s", response_class=HTMLResponse)
-async def generate_link_page(request: Request, folder: str = None, auth: str = None):
-    if not folder or not auth:
+@app.get("/share", response_class=HTMLResponse)
+async def generate_link_page(request: Request, directory: str = None, auth: str = None, query: str = None):
+    if not directory or not auth:
         raise HTTPException(status_code=403, detail="Unauthorized!")
-    
-    print("folder: ", folder)
+    data = { 'path': directory, 'auth': auth, 'query': query }
+    print("folder: ", directory)
     print("auth: ", auth)
-    
+    async with httpx.AsyncClient() as client:
+        response = await client.post(url, json=data)
+        result = response.json()
+    print("Result: ", result)
     # Your logic here (e.g., generating a link or rendering a page)
-    return HTMLResponse(content=f"Folder ID: {folder}, Auth: {auth}")
+    return HTMLResponse(content=f"{result}")
 @app.get("/f", response_class=HTMLResponse)
 async def generate_link_page(request: Request):
     from utils.directoryHandler import DRIVE_DATA
@@ -779,6 +782,41 @@ async def api_new_folder(request: Request,  session: str = Cookie(None)):
 
    
 
+@app.post("/api/getDirectory2")
+async def api_get_directory(request: Request,  session: str = Cookie(None)):
+    from utils.directoryHandler import DRIVE_DATA
+
+    data = await request.json()
+    is_admin = False
+    if session:
+        try:
+            payload = jwt.decode(session, JWT_SECRET, algorithms=["HS256"])
+            is_admin = True  # Validate payload if necessary
+        except jwt.ExpiredSignatureError:
+            raise HTTPException(status_code=403, detail="Session expired")
+        except jwt.InvalidTokenError:
+            raise HTTPException(status_code=403, detail="Invalid session token")
+            
+    auth = data.get("auth")
+
+    query = data.get("query")
+    if auth:
+        auth = auth.split('/')[0]
+        data["auth"] = auth
+    else:
+        auth = None
+    
+    print("THIS IS AUTH: ", auth)
+    logger.info(f"getFolder {data}")
+    path = data["path"]
+    folder_data, auth_home_path = DRIVE_DATA.get_directory(path, is_admin, auth)
+    print("folder share data - ", folder_data)
+    auth_home_path= auth_home_path.replace("//", "/") if auth_home_path else None
+    folder_data = convert_class_to_dict(folder_data, isObject=True, showtrash=False)
+    print("final folder: ", folder_data)
+    return JSONResponse(
+            {"status": "ok", "data": folder_data, "auth_home_path": auth_home_path}
+        )
 
 @app.post("/api/getDirectory")
 async def api_get_directory(request: Request,  session: str = Cookie(None)):
