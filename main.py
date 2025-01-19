@@ -588,6 +588,7 @@ async def generate_link_page(request: Request):
     else:
         media_info = file.rentry_link
     uploader = file.uploader
+    idm = "Use Download Manager for better downloading experience"
     return HTMLResponse(content=f"""
 <!DOCTYPE html>
 <html lang="en">
@@ -705,6 +706,7 @@ async def generate_link_page(request: Request):
       <p><i class="fas fa-user icon"></i>{uploader}</p>
       <p><i class="fas fa-compact-disc icon"></i>{filesize}</p>
       <p><i class="fas fa-info-circle icon"></i><a href={media_info} target="_blank">Media Info</a></p>
+      <p><i class="material-icons" style="color:#ff79c6">error</i>{idm}</p>
     </div>
 
     <!-- Stats Section -->
