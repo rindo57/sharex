@@ -369,26 +369,35 @@ async def SHARE_LINK(request: Request, session: str = Cookie(None), directory: s
     html = ""
     entries = contents.items()
     folders = sorted(
-        [(key, value) for key, value in entries if value.type == "folder"],
-        key=lambda x: x[1].name
+        [(key, value) for key, value in entries if value.get("type") == "folder"],
+        key=lambda x: x[1].get("name")
     )
     files = sorted(
-        [(key, value) for key, value in entries if value.type == "file"],
-        key=lambda x: x[1].name
+        [(key, value) for key, value in entries if value.get("type") == "file"],
+        key=lambda x: x[1].get("name")
     )
 
+    # Render folder rows
     for key, item in folders:
-        html += f'<tr data-path="{item.path}" data-id="{item.id}" class="body-tr folder-tr">'
-        html += f'<td><div class="file-tr"><i class="fas fa-folder icon"></i> {item.name}</div></td>'
-        html += '<td><div class="td-align"></div></td>'
-        html += '<td><div class="download-btn"></div></td></tr>'
+        html += (
+            f'<tr data-path="{item.get("path")}" data-id="{item.get("id")}" class="body-tr folder-tr">'
+            f'<td><div class="file-tr"><i class="fas fa-folder icon"></i> {item.get("name")}</div></td>'
+            '<td><div class="td-align"></div></td>'
+            '<td><div class="download-btn"></div></td></tr>'
+        )
+
+    # Render file rows
     for key, item in files:
-        size = convert_bytes(item.size or 0)
-        html += f'<tr data-path="{item.path}" data-id="{item.id}" data-name="{item.name}" class="body-tr file-tr">'
-        html += f'<td><div class="file-tr"><i class="far fa-file icon"></i> {item.name}</div></td>'
-        html += f'<td><div class="td-align">{size}</div></td>'
-        html += f'<td><div class="td-align"><a href="#" data-path="{item.path}" data-id="{item.id}" data-name="{item.name}" class="download-btn"><i class="fas fa-download icon"></i></a></div></td></tr>'
-    # Your logic here (e.g., generating a link or rendering a page)
+        size = convert_bytes(item.get("size", 0))
+        html += (
+            f'<tr data-path="{item.get("path")}" data-id="{item.get("id")}" data-name="{item.get("name")}" class="body-tr file-tr">'
+            f'<td><div class="file-tr"><i class="far fa-file icon"></i> {item.get("name")}</div></td>'
+            f'<td><div class="td-align">{size}</div></td>'
+            f'<td><div class="td-align"><a href="#" data-path="{item.get("path")}" data-id="{item.get("id")}" data-name="{item.get("name")}" class="download-btn">'
+            f'<i class="fas fa-download icon"></i></a></div></td></tr>'
+        )
+
+    # Set the final HTML for directory data
     directorydata = html
     return HTMLResponse(content=f"""
     <!DOCTYPE html>
