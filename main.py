@@ -419,7 +419,7 @@ async def SHARE_LINK(request: Request, session: str = Cookie(None), directory: s
                 f'<td><div class="td-align"><a href="#" data-path="{item.get("path")}" data-id="{item.get("id")}" data-name="{item.get("name")}" class="download-btn">'
                 f'<i class="fas fa-download icon"></i></a></div></td></tr>'
             )
-        print("HTML END": html)
+        print("HTML END: ", html)
 
     else:
         path = data["path"]
