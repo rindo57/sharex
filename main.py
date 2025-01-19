@@ -393,7 +393,7 @@ async def SHARE_LINK(request: Request, session: str = Cookie(None), directory: s
 
         entries = finaldata.items()
 
-
+        print("entries: ", entries)
         folders = sorted(
             [(key, value) for key, value in entries if value.get("type") == "folder"],
             key=lambda x: x[1].get("name", "").lower()
@@ -419,6 +419,7 @@ async def SHARE_LINK(request: Request, session: str = Cookie(None), directory: s
                 f'<td><div class="td-align"><a href="#" data-path="{item.get("path")}" data-id="{item.get("id")}" data-name="{item.get("name")}" class="download-btn">'
                 f'<i class="fas fa-download icon"></i></a></div></td></tr>'
             )
+        print("HTML END": html)
 
     else:
         path = data["path"]
