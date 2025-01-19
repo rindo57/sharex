@@ -18,43 +18,19 @@ async function getVisitorIp() {
     }
 }
 
-window.addEventListener('DOMContentLoaded', function () {
-    const searchInput = document.getElementById('file-search');
-
-    // Check if 'query' parameter is in the URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const query = urlParams.get('query');
-
-    // If there's a query, set it in the search input field
-    if (query) {
-        searchInput.value = decodeURIComponent(query);
-    }
-});
-
-
-document.getElementById('search-form').addEventListener('submit', function (event) {
-    event.preventDefault();  // Prevent default form submission
-
-    const searchInput = document.getElementById('file-search');
-    const query = searchInput.value.trim();
-
-    if (query === '') {
-        alert('Search field is empty');
-        return;
+ function handleSearch(event) {
+        event.preventDefault(); // Prevent the default form submission
+        const inputQuery = document.getElementById('file-search').value.trim();
+        if (inputQuery) {
+            const redirectUrl = getSharePath() + `&query=${encodeURIComponent(inputQuery)}`;
+            window.location.href = redirectUrl; // Redirect the user
+        } else {
+            alert("Please enter a search query."); // Optional: Handle empty input
+        }
     }
 
-    let currentPath = getSharePath();  // Function to get the current path
-    let path;
-
-    // Check if the current path starts with "/share_"
-
-    currentPath = currentPath.replace(/\/query_.+$/, '');  // Remove any query after "/share_"
-    path = currentPath '&query=' + encodeURIComponent(query);
 
 
-    // Redirect to the constructed path with the query
-    window.location.href = path;
-});
 
 function encodeBase64(str) {
     return btoa(str);  // Converts the string to Base64
