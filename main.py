@@ -388,7 +388,8 @@ async def SHARE_LINK(request: Request, session: str = Cookie(None), directory: s
             return search_results
 
         search_data = traverse_directory(folder['contents'], query)
-        finaldata = {"contents": search_data}
+   #     finaldata = {"contents": search_data}
+        finaldata = search_data
         print("share search folder data:", finaldata)
 
         entries = finaldata.items()
