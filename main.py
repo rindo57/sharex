@@ -595,7 +595,7 @@ async def generate_link_page(request: Request):
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{filename}</title>
-    <link rel="icon" href="https://anidl.org/wp-content/uploads/2018/12/photo_2017-01-30_02-14-16-2-e1594649833348.png" type="image/png">
+    <link rel="icon" href="https://i.kek.sh/VmxAh7g4wD1.png" type="image/png">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
   <style>
     body {{
