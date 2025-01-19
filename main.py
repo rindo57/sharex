@@ -346,14 +346,6 @@ async def SHARE_LINK(request: Request, session: str = Cookie(None), directory: s
     print("auth: ", auth)
 
     is_admin = False
-    if session:
-        try:
-            payload = jwt.decode(session, JWT_SECRET, algorithms=["HS256"])
-            is_admin = True  # Validate payload if necessary
-        except jwt.ExpiredSignatureError:
-            raise HTTPException(status_code=403, detail="Session expired")
-        except jwt.InvalidTokenError:
-            raise HTTPException(status_code=403, detail="Invalid session token")
             
     auth = data.get("auth")
 
