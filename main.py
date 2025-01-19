@@ -458,7 +458,7 @@ async def SHARE_LINK(request: Request, session: str = Cookie(None), directory: s
                             <th>Download</th>
                         </tr>
                     </thead>
-                    <tbody id={directorydata}></tbody>
+                    <tbody id={directorydata}</tbody>
                 </table>
             </div>
         </div>
