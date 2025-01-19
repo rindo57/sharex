@@ -689,12 +689,12 @@ async def generate_link_page(request: Request):
     line-height: 1;
     vertical-align: middle;
     text-align: left;
-    border-radius: 2px;
+    border-radius: 15px;
     margin-left: 2px;
     
-    margin-bottom: 1.5rem;
+    margin-bottom: .5rem;
     border-bottom: 1px solid #444;
-    padding-bottom: 1rem;
+    padding-bottom: rem;
     }}
 
     .actions {{
