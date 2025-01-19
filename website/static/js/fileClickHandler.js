@@ -18,16 +18,17 @@ async function getVisitorIp() {
     }
 }
 
- function handleSearch(event) {
-        event.preventDefault(); // Prevent the default form submission
-        const inputQuery = document.getElementById('file-search').value.trim();
-        if (inputQuery) {
-            const redirectUrl = getSharePath() + `&query=${encodeURIComponent(inputQuery)}`;
-            window.location.href = redirectUrl; // Redirect the user
-        } else {
-            alert("Please enter a search query."); // Optional: Handle empty input
-        }
+function updateAction(event) {
+    event.preventDefault(); // Prevent the form from submitting immediately
+    const userInput = document.getElementById("file-search").value;
+    if (userInput.trim() !== "") {
+        const form = document.getElementById("search-form");
+        form.action = getSharePath() + `&query=${encodeURIComponent(userInput)}`;
+        form.submit(); // Submit the form with the updated action
+    } else {
+        alert("Please enter a search term.");
     }
+}
 
 
 
