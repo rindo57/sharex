@@ -409,7 +409,7 @@ async def SHARE_LINK(request: Request, session: str = Cookie(None), directory: s
     directorydata = html
     homeurl = f"/share?directory={directory}&auth={auth}"
     return HTMLResponse(content=f"""
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -426,14 +426,11 @@ async def SHARE_LINK(request: Request, session: str = Cookie(None), directory: s
         <!-- Sidebar Start -->
         <div class="sidebar" id="sidebar">
             <div class="sidebar-header">
-                <a href="https://anidl.org"><img src="https://i.kek.sh/GVHR4Bjb9uO.png" /></a>
-                <span></span>
+                <a href="https://anidl.org"><img src="https://i.kek.sh/GVHR4Bjb9uO.png" alt="AniDL Logo" /></a>
             </div>
 
-        
-
             <div class="sidebar-menu">
-                <a class="selected-item" href={homeurl}><img src="static/assets/home-icon.svg" />Home</a>
+                <a class="selected-item" href={homeurl}><img src="static/assets/home-icon.svg" alt="Home Icon" />Home</a>
             </div>
         </div>
         <!-- Sidebar End -->
@@ -441,13 +438,12 @@ async def SHARE_LINK(request: Request, session: str = Cookie(None), directory: s
         <button id="hamburger-menu" class="hamburger" onclick="toggleSidebar()">☰</button>
         <div id="bg-blur" class="bg-blur"></div>
 
-
         <!-- Main Content Start -->
         <div class="main-content">
             <div class="header">
                 <div class="search-bar">
-                    <img src="static/assets/search-icon.svg" />
-                    <form id="search-form">
+                    <img src="static/assets/search-icon.svg" alt="Search Icon" />
+                    <form id="search-form" action="#" method="get">
                         <input id="file-search" type="text" placeholder="Search in Drive" autocomplete="off" />
                     </form>
                 </div>
@@ -476,19 +472,19 @@ async def SHARE_LINK(request: Request, session: str = Cookie(None), directory: s
     </footer>
     <!-- Footer End -->
     <script src="static/js/fileClickHandler.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/Snowstorm/20131208/snowstorm-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Snowstorm/20131208/snowstorm-min.js"></script>
 
-<script>
-	snowStorm.snowColor = '#FFF';
-	snowStorm.flakesMax = 128;
-	snowStorm.flakesMaxActive = 96;
-	snowStorm.useTwinkleEffect = 1;
-	snowStorm.followMouse = 0;
-	snowStorm.snowStick = 1;
-	snowStorm.animationInterval = 35;
-	snowStorm.excludeMobile = 0;
-	snowStorm.zIndex = 9999;
-</script>
+    <script>
+        snowStorm.snowColor = '#FFF';
+        snowStorm.flakesMax = 128;
+        snowStorm.flakesMaxActive = 96;
+        snowStorm.useTwinkleEffect = 1;
+        snowStorm.followMouse = 0;
+        snowStorm.snowStick = 1;
+        snowStorm.animationInterval = 35;
+        snowStorm.excludeMobile = 0;
+        snowStorm.zIndex = 9999;
+    </script>
 </body>
 
 </html>
