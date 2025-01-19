@@ -375,13 +375,15 @@ async def SHARE_LINK(request: Request, session: str = Cookie(None), directory: s
     html = ""
     entries = contents.items()
     folders = sorted(
-        [(key, value) for key, value in entries if value.get("type") == "folder"],
-        key=lambda x: x[1].get("name")
-    )
+	[(key, value) for key, value in entries if value.get("type") == "folder"],
+    	key=lambda x: x[1].get("name", "").lower()  # Default to empty string and ensure case-insensitivity
+     )
+
+# Sorting files based on the "name" key
     files = sorted(
-        [(key, value) for key, value in entries if value.get("type") == "file"],
-        key=lambda x: x[1].get("name")
-    )
+    	[(key, value) for key, value in entries if value.get("type") == "file"],
+    	key=lambda x: x[1].get("name", "").lower()  # Default to empty string and ensure case-insensitivity
+	)
 
     # Render folder rows
     for key, item in folders:
@@ -405,6 +407,7 @@ async def SHARE_LINK(request: Request, session: str = Cookie(None), directory: s
 
     # Set the final HTML for directory data
     directorydata = html
+    homeurl = f"/share?=directory={directory}&auth{auth}"
     return HTMLResponse(content=f"""
     <!DOCTYPE html>
 <html lang="en">
@@ -430,7 +433,7 @@ async def SHARE_LINK(request: Request, session: str = Cookie(None), directory: s
         
 
             <div class="sidebar-menu">
-                <a class="selected-item" href="/?path=/"><img src="static/assets/home-icon.svg" />Home</a>
+                <a class="selected-item" href={homeurl}><img src="static/assets/home-icon.svg" />Home</a>
             </div>
         </div>
         <!-- Sidebar End -->
@@ -457,7 +460,6 @@ async def SHARE_LINK(request: Request, session: str = Cookie(None), directory: s
                             <th>Name</th>
                             <th>File Size</th>
                             <th>Download</th>
-                            <th>More</th>
                         </tr>
                     </thead>
                     <tbody id={directorydata}></tbody>
