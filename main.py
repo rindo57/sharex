@@ -336,6 +336,11 @@ async def verify_turnstile_token(response_token: str) -> bool:
     return result.get("success", False)
 
 
+@app.get("/s?={shareid}&auth={auth}", response_class=HTMLResponse)
+async def generate_link_page(request: Request):
+    print("shareid: ", shareid)
+    print(auth)
+    raise HTTPException(status_code=403, detail="Unauthorized!")
 @app.get("/f", response_class=HTMLResponse)
 async def generate_link_page(request: Request):
     from utils.directoryHandler import DRIVE_DATA
