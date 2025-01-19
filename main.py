@@ -605,9 +605,9 @@ async def generate_link_page(request: Request):
         audinf = ""
     subinf = ""
     if hasattr(file, 'subtitle') and file.subtitle:
-        subinf = """<p><i class="fa fa-cc" style="color:#ff79c6"></i> """
+        subinf = """<p><i class="fa fa-cc" style="color:#ff79c6"></i> <span>"""
         for y in file.subtitle:
-            subinf += f"""<i class="fi fi-{y}"></i>"""
+            subinf += f"""<i class="fi fi-{y}" style="font-size:18px"></i>"""
             print(subinf)
         subinf += "</p>"
     else:
