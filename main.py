@@ -587,24 +587,26 @@ async def generate_link_page(request: Request):
         media_info = file.paste_url
     else:
         media_info = file.rentry_link
-
+    vidinfo = ""
     if hasattr(file, 'resolution') and file.resolution:
         if hasattr(file, 'codec') and file.codec:
             if hasattr(file, 'bit_depth') and file.bit_depth:
                 vidinfo = f"""<p><i class="fas fa-video"></i>{file.resolution} | {file.codec} | {file.bit_depth}</p>"""
     else:
         vidinfo = ""
-
+    audinf = ""
     if hasattr(file, 'audio') and file.audio:
         for i in file.audio:
             audinf = f"""<i class="fas fa-volume-up"></i><i class='fi fi-{i}'></i>"""
     else:
         audinf = ""
+    subinf = "" 
     if hasattr(file, 'subtitle') and file.subtitle:
         for i in file.subtitle:
             subinf = f"""<i class="fa fa-cc"></i><i class='fi fi-{i}'></i>"""
     else:
         subinf = ""   
+    dur = ""
     if hasattr(file, 'duration') and file.duration:
         dur = f"""<p><i class="fas fa-clock"></i>{file.duration}</p>"""
     else:
