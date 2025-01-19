@@ -338,10 +338,10 @@ async def verify_turnstile_token(response_token: str) -> bool:
 
 @app.get("/s", response_class=HTMLResponse)
 async def generate_link_page(request: Request, folder: str = None, auth: str = None):
-    if not shareid or not auth:
+    if not folder or not auth:
         raise HTTPException(status_code=403, detail="Unauthorized!")
     
-    print("shareid: ", folder)
+    print("folder: ", folder)
     print("auth: ", auth)
     
     # Your logic here (e.g., generating a link or rendering a page)
