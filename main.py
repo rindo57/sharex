@@ -598,13 +598,13 @@ async def generate_link_page(request: Request):
     audinf = ""
     if hasattr(file, 'audio') and file.audio:
         for i in file.audio:
-            audinf = f"""<i class="fas fa-volume-up" style="color:#ff79c6"></i> <i class="fi fi-{i}"></i>"""
+            audinf.append(f"""<p><i class="fas fa-volume-up" style="color:#ff79c6"></i> <i class="fi fi-{i}"></i></p>""")
     else:
         audinf = ""
     subinf = "" 
     if hasattr(file, 'subtitle') and file.subtitle:
         for y in file.subtitle:
-            subinf = f"""<i class="fa fa-cc" style="color:#ff79c6"></i> <i class="fi fi-{y}"></i>"""
+            subinf.append(f"""<p><i class="fa fa-cc" style="color:#ff79c6"></i> <i class="fi fi-{y}"></i></p>""")
             print(subinf)
     else:
         subinf = ""   
