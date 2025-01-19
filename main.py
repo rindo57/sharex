@@ -620,6 +620,7 @@ async def generate_link_page(request: Request):
     else:
         dur = ""   
     
+
     uploader = file.uploader
     idm = "Use Download Manager for better downloading experience"
     return HTMLResponse(content=f"""
@@ -641,15 +642,15 @@ async def generate_link_page(request: Request):
       justify-content: center;
       align-items: center;
       min-height: 100vh;
-      background-color: #25293c;
+      background: linear-gradient(45deg, #4b6cb7, #182848);
       margin: 0;
     }}
 
     .container {{
-      background: #1b1f2f;
+      background: rgba(27, 31, 47, 0.9);  /* Slightly transparent background */
       padding: 2rem;
       border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
       max-width: 450px;
       width: 100%;
       color: #f0f0f0;
@@ -738,7 +739,7 @@ async def generate_link_page(request: Request):
 
     <!-- File Info Section -->
     <div class="file-info">
-      <p><i class="fas fa-file icon"></i> <span>{filename}</p>
+      <p><i class="fas fa-file icon"></i> <span>{filename}</span></p>
       <p><i class="fas fa-user icon"></i>{uploader}</p>
       <p><i class="fas fa-compact-disc icon"></i>{filesize}</p>
       {dur}
@@ -803,9 +804,8 @@ async def generate_link_page(request: Request):
   </script>
 </body>
 </html>
-
-
 """)
+
 
 @app.post("/verify-turnstile")
 async def verify_turnstile(download_path: str = Form(...), cf_turnstile_response: str = Form(...)):
