@@ -8,6 +8,11 @@ function openFolder() {
     window.location.href = `/?path=${path}`
 }
 
+function getSharePath() {
+    const url = new URL(window.location.href);
+    return url
+}
+
 async function getVisitorIp() {
     try {
         const response = await fetch('https://api.ipify.org?format=json');
@@ -17,28 +22,32 @@ async function getVisitorIp() {
         console.error("Error fetching IP:", error);
     }
 }
-document.getElementById("search-form").addEventListener("submit", function(event) {
-        const userInput = document.getElementById("file-search").value.trim();
-        if (userInput !== "") {
-            // Update form action with the user input query
-            this.action =  getSharePath() + `&query=${encodeURIComponent(userInput)}`;
-        } else {
-            event.preventDefault(); // Prevent submission if input is empty
-            alert("Please enter a search term.");
-        }
-    });
 
-function updateAction(event) {
-    event.preventDefault(); // Prevent the form from submitting immediately
-    const userInput = document.getElementById("file-search").value;
-    if (userInput.trim() !== "") {
-        const form = document.getElementById("search-form");
-        form.action =
-        form.submit(); // Submit the form with the updated action
-    } else {
-        alert("Please enter a search term.");
+
+document.getElementById('search-form').addEventListener('submit', function (event) {
+    event.preventDefault();  // Prevent default form submission
+
+    const searchInput = document.getElementById('file-search');
+    const query = searchInput.value.trim();
+
+    if (query === '') {
+        alert('Search field is empty');
+        return;
     }
-}
+
+    let currentPath = getSharePath();  // Function to get the current path
+    let path;
+
+    // Check if the current path starts with "/share_"
+
+    currentPath = currentPath.replace(/\/query_.+$/, '');  // Remove any query after "/share_"
+    path = currentPath + '&query=' + encodeURIComponent(query);
+    
+
+    // Redirect to the constructed path with the query
+    window.location.href = path;
+});
+
 
 
 
