@@ -8,3 +8,5 @@ aiohttp
 curl_cffi
 techzdl>=1.2.6
 pyjwt
+pycountry
+pymediainfo
