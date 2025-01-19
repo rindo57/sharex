@@ -620,7 +620,6 @@ async def generate_link_page(request: Request):
     else:
         dur = ""   
     
-
     uploader = file.uploader
     idm = "Use Download Manager for better downloading experience"
     return HTMLResponse(content=f"""
@@ -642,15 +641,15 @@ async def generate_link_page(request: Request):
       justify-content: center;
       align-items: center;
       min-height: 100vh;
-      background: linear-gradient(45deg, #4b6cb7, #182848);
+      background-color: #25293c;
       margin: 0;
     }}
 
     .container {{
-      background: rgba(27, 31, 47, 0.9);  /* Slightly transparent background */
+      background: #1b1f2f;
       padding: 2rem;
       border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
       max-width: 450px;
       width: 100%;
       color: #f0f0f0;
@@ -681,9 +680,22 @@ async def generate_link_page(request: Request):
     }}
 
     .file-info {{
-      margin-bottom: 1.5rem;
-      border-bottom: 1px solid #444;
-      padding-bottom: 1rem;
+    background-color: #d3d3d31c;
+    padding: 5px;
+    display: inline-block;
+    min-width: 6px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1;
+    vertical-align: middle;
+    white-space: nowrap;
+    text-align: center;
+    border-radius: 2px;
+    margin-left: 2px;
+    
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid #444;
+    padding-bottom: 1rem;
     }}
 
     .actions {{
@@ -739,7 +751,7 @@ async def generate_link_page(request: Request):
 
     <!-- File Info Section -->
     <div class="file-info">
-      <p><i class="fas fa-file icon"></i> <span>{filename}</span></p>
+      <p><i class="fas fa-file icon"></i> <span>{filename}</p>
       <p><i class="fas fa-user icon"></i>{uploader}</p>
       <p><i class="fas fa-compact-disc icon"></i>{filesize}</p>
       {dur}
