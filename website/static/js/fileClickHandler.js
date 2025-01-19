@@ -23,9 +23,21 @@ async function getVisitorIp() {
     }
 }
 
+window.addEventListener('DOMContentLoaded', function () {
+    const searchInput = document.getElementById('file-search');
+
+    // Check if 'query' parameter is in the URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const query = urlParams.get('query');
+
+    // If there's a query, set it in the search input field
+    if (query) {
+        searchInput.value = decodeURIComponent(query);
+    }
+});
 
 document.getElementById('search-form').addEventListener('submit', function (event) {
-    event.preventDefault();  // Prevent default form submission
+    event.preventDefault();  
 
     const searchInput = document.getElementById('file-search');
     const query = searchInput.value.trim();
@@ -35,18 +47,17 @@ document.getElementById('search-form').addEventListener('submit', function (even
         return;
     }
 
-    let currentPath = window.location.href; // Function to get the current path
-    let path;
+    // Get the current URL
+    let currentPath = window.location.href;
 
-    // Check if the current path starts with "/share_"
+    // Parse the current URL and update the query parameter
+    let url = new URL(currentPath);
+    url.searchParams.set('query', query); // Update or add the 'query' parameter
 
-  //  currentPath = currentPath.replace(/\/query_.+$/, '');  // Remove any query after "/share_"
-    path = currentPath + '&query=' + encodeURIComponent(query);
-    
-
-    // Redirect to the constructed path with the query
-    window.location.href = path;
+    // Redirect to the updated URL
+    window.location.href = url.toString();
 });
+
 
 
 
