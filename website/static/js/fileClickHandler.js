@@ -35,7 +35,7 @@ document.getElementById('search-form').addEventListener('submit', function (even
         return;
     }
 
-    let currentPath = 'http://72.144.240.210/share?directory=/LyNQJipyNVWJZJp&auth=MUqtGVs4COm3qp9'  // Function to get the current path
+    let currentPath = window.location.href; // Function to get the current path
     let path;
 
     // Check if the current path starts with "/share_"
