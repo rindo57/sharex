@@ -591,26 +591,26 @@ async def generate_link_page(request: Request):
     if hasattr(file, 'resolution') and file.resolution:
         if hasattr(file, 'codec') and file.codec:
             if hasattr(file, 'bit_depth') and file.bit_depth:
-                vidinfo = f"""<p><i class="fas fa-video" style="color:#ff79c6;"></i>{file.resolution} | {file.codec} | {file.bit_depth}</p>"""
+                vidinfo = f"""<p><i class="fas fa-video" style="color:#ff79c6"></i>{file.resolution} | {file.codec} | {file.bit_depth}</p>"""
                 print("videoinfo", vidinfo)
     else:
         vidinfo = ""
     audinf = ""
     if hasattr(file, 'audio') and file.audio:
         for i in file.audio:
-            audinf = f"""<i class="fas fa-volume-up" style="color:#ff79c6;"></i> <i class='fi fi-{i}'</i>"""
+            audinf = f"""<i class="fas fa-volume-up" style="color:#ff79c6"></i> <i class="fi fi-{i}"</i>"""
     else:
         audinf = ""
     subinf = "" 
     if hasattr(file, 'subtitle') and file.subtitle:
         for y in file.subtitle:
-            subinf = f"""<i class="fa fa-cc" style="color:#ff79c6;"></i> <i class='fi fi-{y}'></i>"""
+            subinf = f"""<i class="fa fa-cc" style="color:#ff79c6"></i> <i class="fi fi-{y}"></i>"""
             print(subinf)
     else:
         subinf = ""   
     dur = ""
     if hasattr(file, 'duration') and file.duration:
-        dur = f"""<p><i class="fas fa-clock" style="color:#ff79c6;"></i>{file.duration}</p>"""
+        dur = f"""<p><i class="fas fa-clock" style="color:#ff79c6"></i>{file.duration}</p>"""
     else:
         dur = ""   
     
