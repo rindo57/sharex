@@ -605,11 +605,11 @@ async def generate_link_page(request: Request):
         audinf = ""
     subinf = ""
     if hasattr(file, 'subtitle') and file.subtitle:
-        subinf = """<p><i class="fa fa-cc" style="color:#ff79c6"></i> <span style="display: flex; flex-wrap: wrap; gap: 10px;">"""
+        subinf = """<p><i class="fa fa-cc" style="color:#ff79c6"></i> <span style="display: flex; flex-wrap: wrap; gap: 5px;">"""
     # Use a set to ensure uniqueness
         unique_subtitles = set(file.subtitle)
         for y in unique_subtitles:
-            subinf += f"""<i class="fi fi-{y}" style="font-size:16px; margin-right: 8px;"></i> """
+            subinf += f"""<i class="fi fi-{y}" style="font-size:16px; margin-right: 1px;"></i> """
         subinf += "</span></p>"
     else:
         subinf = ""
