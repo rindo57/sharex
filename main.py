@@ -598,6 +598,7 @@ async def generate_link_page(request: Request):
   <title>{filename}</title>
     <link rel="icon" href="https://i.kek.sh/VmxAh7g4wD1.png" type="image/png">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <style>
     body {{
       font-family: 'Arial', sans-serif;
