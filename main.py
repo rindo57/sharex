@@ -587,6 +587,29 @@ async def generate_link_page(request: Request):
         media_info = file.paste_url
     else:
         media_info = file.rentry_link
+
+    if hasattr(file, 'resolution') and file.resolution:
+        if hasattr(file, 'codec') and file.codec:
+            if hasattr(file, 'bit_depth') and file.bit_depth:
+                vidinfo = f"""<p><i class="fas fa-video"></i>{file.resolution} | {file.codec} | {file.bit_depth}</p>"""
+    else:
+        vidinfo = ""
+
+    if hasattr(file, 'audio') and file.audio:
+        for i in file.audio:
+            audinf = f"""<i class="fas fa-volume-up"></i><i class='fi fi-{i}'></i>"""
+    else:
+        audinf = ""
+    if hasattr(file, 'subtitle') and file.subtitle:
+        for i in file.subtitle:
+            subinf = f"""<i class="fa fa-cc"></i><i class='fi fi-{i}'></i>"""
+    else:
+        subinf = ""   
+    if hasattr(file, 'duration') and file.duration:
+        dur = f"""<p><i class="fas fa-clock"></i>{file.duration}</p>"""
+    else:
+        dur = ""   
+    
     uploader = file.uploader
     idm = "Use Download Manager for better downloading experience"
     return HTMLResponse(content=f"""
@@ -707,6 +730,10 @@ async def generate_link_page(request: Request):
       <p><i class="fas fa-file icon"></i> <span>{filename}</p>
       <p><i class="fas fa-user icon"></i>{uploader}</p>
       <p><i class="fas fa-compact-disc icon"></i>{filesize}</p>
+      {dur}
+      {vidinfo}
+      {audinf}
+      {subinf}
       <p><i class="fas fa-info-circle icon"></i><a href={media_info} target="_blank">Media Info</a></p>
       <p><i class="fas fa-rocket icon"></i>{idm}</p>
     </div>
