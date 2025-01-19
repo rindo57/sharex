@@ -290,12 +290,12 @@ async function shareFile() {
     const id = this.getAttribute('id').split('-')[1]
     const path = document.getElementById(`more-option-${id}`).getAttribute('data-path') + '/' + id
     const root_url = getRootUrl()
-
+    const encodedPathSuffix = btoa(id).split('').reverse().join('');
     let link
     if (fileName.endsWith('.mp4') || fileName.endsWith('.mkv') || fileName.endsWith('.webm') || fileName.endsWith('.mov') || fileName.endsWith('.avi') || fileName.endsWith('.ts') || fileName.endsWith('.ogv')) {
-        link = `${root_url}/file?download=${path}`
+        link = `${root_url}/f?${encodedPathSuffix}`
     } else {
-        link = `${root_url}/file?download=${path}`
+        link = `${root_url}/f?${encodedPathSuffix}`
 
     }
 
@@ -312,7 +312,7 @@ async function shareFolder() {
     const auth = await getFolderShareAuth(path)
     path = path.slice(1)
 
-    let link = `${root_url}/?path=/share_${path}&auth=${auth}`
+    let link = `${root_url}/share?directory=${path}&auth=${auth}`
     console.log(link)
 
     copyTextToClipboard(link)
