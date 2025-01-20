@@ -641,12 +641,13 @@ async def generate_link_page(request: Request):
       justify-content: center;
       align-items: center;
       min-height: 100vh;
-      background-color: #25293c;
+      background-color: #1a1a1a;
       margin: 0;
+      font-weight: 800;
     }}
 
     .container {{
-      background: #1b1f2f;
+      background: black;
       padding: 2rem;
       border-radius: 10px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
@@ -681,11 +682,13 @@ async def generate_link_page(request: Request):
 
     .file-info {{
     background-color: #d3d3d31c;
-    padding: 5px;
+    padding: 8px;
+    padding-top: 0px;
+    padding-bottom: 0px;
     display: inline-block;
     min-width: 6px;
     font-size: 14px;
-    font-weight: 400;
+    font-weight: 800;
     line-height: 1;
     vertical-align: middle;
     text-align: left;
@@ -773,9 +776,7 @@ async def generate_link_page(request: Request):
     <div class="file-info">
       <p><i class="fas fa-info-circle icon"></i><a href={media_info} target="_blank">Media Info</a></p>
     </div>
-    <div class="file-info">
-      <p><i class="fas fa-rocket icon"></i>{idm}</p>
-    </div>
+    <br>
 
     <!-- Stats Section -->
     <div class="actions">
