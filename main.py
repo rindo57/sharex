@@ -644,7 +644,7 @@ async def generate_link_page(request: Request):
       background-color: #1a1a1a;
       margin: 0;
       font-weight: 800;
-      background-image: url('https://moe.sale');
+      background-image: url('http://moe.sale');
       background-size: cover;
       background-position: center;
       opacity: 0.85; /* Adjust opacity for translucency */
