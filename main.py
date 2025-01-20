@@ -647,7 +647,7 @@ async def generate_link_page(request: Request):
       background-image: url('https://pic.re/image');
       background-size: cover;
       background-position: center;
-      opacity: 0.5; /* Adjust opacity for translucency */
+      opacity: 0.85; /* Adjust opacity for translucency */
     }}
 
     .container {{
