@@ -635,7 +635,7 @@ async def generate_link_page(request: Request):
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/flag-icons/css/flag-icons.min.css" rel="stylesheet">
   <style>
-    body {{
+   body {{
       font-family: 'Arial', sans-serif;
       display: flex;
       justify-content: center;
@@ -644,10 +644,14 @@ async def generate_link_page(request: Request):
       background-color: #1a1a1a;
       margin: 0;
       font-weight: 800;
+      background-image: url('https://pics.re/image');
+      background-size: cover;
+      background-position: center;
+      opacity: 0.5; /* Adjust opacity for translucency */
     }}
 
     .container {{
-      background: black;
+      background: rgba(0, 0, 0, 0.8); /* Semi-transparent container */
       padding: 2rem;
       border-radius: 10px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
@@ -655,6 +659,7 @@ async def generate_link_page(request: Request):
       width: 100%;
       color: #f0f0f0;
     }}
+    
 
     h2 {{
       margin-bottom: 1.5rem;
@@ -776,7 +781,7 @@ async def generate_link_page(request: Request):
     <div class="file-info">
       <p><i class="fas fa-info-circle icon"></i><a href={media_info} target="_blank">Media Info</a></p>
     </div>
-    <br>
+    <hr>
 
     <!-- Stats Section -->
     <div class="actions">
