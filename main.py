@@ -686,7 +686,7 @@ async def generate_link_page(request: Request):
     }}
 
     .file-info {{
-    background-color: #d3d3d31c;
+    background-color: #d3d3d330;
     padding: 8px;
     padding-top: 0px;
     padding-bottom: 0px;
