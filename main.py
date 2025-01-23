@@ -953,11 +953,10 @@ async def donate(request: Request):
 </body>
 </html>
 """
-
-@app.get("/crypto", response_class=HTMLResponse)
-async def donatex(request: Request):
-    return HTMLResponse(content=f"""
-<!DOCTYPE html>
+#@app.get("/crypto", response_class=HTMLResponse)
+#async def donatex(request: Request):
+   # return HTMLResponse(content=f"""
+"""<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
