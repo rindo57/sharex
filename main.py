@@ -955,7 +955,7 @@ async def donate(request: Request):
 """
 
 @app.get("/donate/crypto", response_class=HTMLResponse)
-async def donate(request: Request):
+async def donatex(request: Request):
     return HTMLResponse(content=f"""
 <!DOCTYPE html>
 <html lang="en">
