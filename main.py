@@ -839,7 +839,267 @@ async def generate_link_page(request: Request):
 </html>
 """)
 
+@app.get("/donate", response_class=HTMLResponse)
+async def donate(request: Request):
+        return HTMLResponse(content=f"""
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Support Anime Encoding</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    body {{
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #1e1e2f, #3a3a59);
+      color: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }}
 
+    .donation-container {{
+      background: rgba(0, 0, 0, 0.8);
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.5);
+      max-width: 500px;
+      text-align: center;
+    }}
+
+    .donation-container h1 {{
+      color: #ff79c6;
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }}
+
+
+    .donation-container p {{
+      font-size: 1rem;
+      margin-bottom: 1.5rem;
+    }}
+
+    .donation-buttons a {{
+      display: inline-block;
+      margin: 10px;
+      padding: 10px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #ffffff;
+      transition: all 0.3s ease;
+    }}
+
+    .donation-buttons .donorbox {{
+      background: #0077cc;
+    }}
+
+    .donation-buttons .donorbox:hover {{
+      background: #005fa3;
+    }}
+
+    .donation-buttons .crypto {{
+      background: #ff4500;
+    }}
+
+    .donation-buttons .crypto:hover {{
+      background: #cc3700;
+    }}
+    .crypto-section {{
+      margin-top: 1.5rem;
+      text-align: left;
+    }}
+
+    .crypto-section h2 {{
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: #ff79c6;
+    }}
+
+    .crypto-address {{
+      background: #2c2c44;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+      overflow-wrap: break-word;
+    }}
+
+    .crypto-address span {{
+      font-weight: bold;
+    }}
+  </style>
+</head>
+<body>
+  <div class="donation-container">
+    <h1>Support Our Anime Encoding Journey</h1>
+    <p>Help us keep the servers running and bring you high-quality anime encodes. Every donation helps!</p>
+
+    <div class="donation-buttons">
+      <a href="https://donorbox.org/anidl-donation" class="donorbox" target="_blank">
+        <i class="fas fa-donate"></i> Donate via Donorbox
+      </a>
+      <a href="https://hi-anime.ddlserverv1.me.in/donate/crypto" class="crypto">
+        <i class="fas fa-coins"></i> Donate via Cryptocurrency
+      </a>
+    </div>
+  </div>
+</body>
+</html>
+"""
+
+@app.get("/donate/crypto", response_class=HTMLResponse)
+async def donate(request: Request):
+        return HTMLResponse(content=f"""
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cryptocurrency Donations</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    body {{
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #1e1e2f, #3a3a59);
+      color: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }}
+
+    .donation-container {{
+      background: rgba(0, 0, 0, 0.8);
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.5);
+      max-width: 5000px;
+      text-align: center;
+    }}
+
+    .donation-container h1 {{
+      color: #ff79c6;
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }}
+
+    .crypto-section {{
+      margin-top: 1.5rem;
+      text-align: left;
+    }}
+
+    .crypto-section h2 {{
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: #ff79c6;
+    }}
+
+    .crypto-address {{
+      background: #2c2c44;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }}
+
+    .crypto-address span {{
+      font-weight: bold;
+    }}
+
+    .copy-button {{
+      background: #0077cc;
+      border: none;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      margin-top: 5px;
+    }}
+
+    .copy-button:hover {{
+      background: #005fa3;
+    }}
+
+    .crypto-icon {{
+      margin-right: 10px;
+      width: 24px;
+      height: 24px;
+      vertical-align: middle;
+    }}
+
+    .crypto-details {{
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+    }}
+
+    .crypto-details span {{
+      margin-right: 10px;
+    }}
+  </style>
+</head>
+<body>
+  <div class="donation-container">
+    <h1>Donate via Cryptocurrency</h1>
+    <div class="crypto-section">
+      <h2>Cryptocurrency Addresses</h2>
+
+      <div class="crypto-address">
+        <div class="crypto-details">
+          <img src="https://cryptologos.cc/logos/bitcoin-btc-logo.png" alt="Bitcoin Logo" class="crypto-icon">
+          <span>BTC:</span>
+          <span>1FfmbHfnpaZjKFvyi1okTjJJusN455paPH</span>
+        </div>
+        <button class="copy-button" onclick="copyToClipboard('1FfmbHfnpaZjKFvyi1okTjJJusN455paPH')">Copy</button>
+      </div>
+
+      <div class="crypto-address">
+        <div class="crypto-details">
+          <img src="https://cryptologos.cc/logos/solana-sol-logo.png" alt="Solana Logo" class="crypto-icon">
+          <span>SOL:</span>
+          <span>BZfzENYjrCTSrw2MgviQeaKkrgmtdQZqJ3E5U95EC9Xd</span>
+        </div>
+        <button class="copy-button" onclick="copyToClipboard('6Yg1eidNWs9qhLwj3AkLGH7UTPrCFKSsh1ze2y1RU8GV')">Copy</button>
+      </div>
+
+      <div class="crypto-address">
+        <div class="crypto-details">
+          <img src="https://cryptologos.cc/logos/toncoin-ton-logo.svg?v=040" alt="TON Logo" class="crypto-icon">
+          <span>TON:</span>
+          <span>Ef8Nb7157K5bVxNKAvIWreRcF0RcUlzcCA7lwmewWVNtqM3s</span>
+        </div>
+        <button class="copy-button" onclick="copyToClipboard('Ef8Nb7157K5bVxNKAvIWreRcF0RcUlzcCA7lwmewWVNtqM3s')">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function copyToClipboard(text) {{
+      navigator.clipboard.writeText(text).then(() => {{
+        alert('Address copied to clipboard!');
+      }}, () => {{
+        alert('Failed to copy address.');
+      }});
+    }}
+  </script>
+</body>
+</html>
+"""
 @app.post("/verify-turnstile")
 async def verify_turnstile(download_path: str = Form(...), cf_turnstile_response: str = Form(...)):
     if not await verify_turnstile_token(cf_turnstile_response):
