@@ -186,17 +186,21 @@ def create_paste(api_key, source_code):
     str: The URL of the created paste.
     """
     # Define the API endpoint
-    API_ENDPOINT = "https://pastebin.com/api/api_post.php"  # Use HTTPS
-
-    # Prepare the data to be sent to the API
-    data = {
-        'api_dev_key': api_key,
-        'api_option': 'paste',
-        'api_paste_code': source_code,
+    cfurl = "http://localhost:8191/v1"
+    headers = {"Content-Type": "application/json"}
+    dataz = {
+        "api_dev_key": api_key,
+        "api_paste_code": source_code,
+        "cmd": "request.get",
+        "url": f"https://pastebin.com/api/api_post.php",
+        "api_option": 'paste',
+        "maxTimeout": 60000
     }
+    response = requests.post(cfurl, headers=headers, json=dataz)
+    # Prepare the data to be sent to the API
 
     # Send a POST request to create a new paste
-    response = requests.post(url=API_ENDPOINT, data=data)
+   # response = requests.post(url=API_ENDPOINT, data=data)
 
     # Return the URL of the created paste, formatted for raw access
     return response.text.replace("pastebin.com/", "pastebin.com/raw/")
@@ -279,6 +283,7 @@ async def start_file_uploader(file_path, id, directory_path, filename, file_size
         media_details = format_media_info(file_path, file_size)
         content = f"Media Info:\n\n{media_details}"
         api_key = "mZPtsfP1kPALQDyF56Qk1_exO1dIkWcR"  # Replace with your actual API key
+        
         paste_url = create_paste(api_key, content)
         print("The pastebin URL is:", paste_url)
         rentry_link = get_rentry_link(content)
