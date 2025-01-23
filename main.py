@@ -952,7 +952,7 @@ async def donate(request: Request):
   </div>
 </body>
 </html>
-)"""
+""")
 @app.get("donate/crypto", response_class=HTMLResponse)
 async def donatex(request: Request):
     return HTMLResponse(content=f"""
@@ -1098,7 +1098,7 @@ async def donatex(request: Request):
   </script>
 </body>
 </html>
-)"""
+""")
 @app.post("/verify-turnstile")
 async def verify_turnstile(download_path: str = Form(...), cf_turnstile_response: str = Form(...)):
     if not await verify_turnstile_token(cf_turnstile_response):
