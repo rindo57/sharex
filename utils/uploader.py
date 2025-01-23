@@ -191,7 +191,7 @@ def create_paste(api_key, source_code):
     dataz = {
         "api_dev_key": api_key,
         "api_paste_code": source_code,
-        "cmd": "request.get",
+        "cmd": "request.post",
         "url": f"https://pastebin.com/api/api_post.php",
         "api_option": 'paste',
         "maxTimeout": 60000
