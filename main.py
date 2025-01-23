@@ -945,7 +945,7 @@ async def donate(request: Request):
       <a href="https://donorbox.org/anidl-donation" class="donorbox" target="_blank">
         <i class="fas fa-donate"></i> Donate via Donorbox
       </a>
-      <a href="https://hi-anime.ddlserverv1.me.in/donate/crypto" class="crypto">
+      <a href="https://hi-drive.ddlserverv1.me.in/donate/crypto" class="crypto">
         <i class="fas fa-coins"></i> Donate via Cryptocurrency
       </a>
     </div>
@@ -953,7 +953,7 @@ async def donate(request: Request):
 </body>
 </html>
 """)
-@app.get("donate/crypto", response_class=HTMLResponse)
+@app.get("/donate/crypto", response_class=HTMLResponse)
 async def donatex(request: Request):
     return HTMLResponse(content=f"""
 <!DOCTYPE html>
