@@ -841,7 +841,7 @@ async def generate_link_page(request: Request):
 
 @app.get("/donate", response_class=HTMLResponse)
 async def donate(request: Request):
-        return HTMLResponse(content=f"""
+    return HTMLResponse(content=f"""
     <!DOCTYPE html>
 <html lang="en">
 <head>
