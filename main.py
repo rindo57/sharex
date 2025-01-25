@@ -482,6 +482,8 @@ async def SHARE_LINK(request: Request, session: str = Cookie(None), directory: s
     <link rel="icon" href="https://i.kek.sh/VmxAh7g4wD1.png" type="image/png">
     <link rel="stylesheet" href="static/home.css" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+     
+<script type="text/javascript" src="//www.highperformanceformat.com/220e60862df77eca071b576151e413d1/invoke.js"></script>
 </head>
 
 <body>
@@ -526,6 +528,20 @@ async def SHARE_LINK(request: Request, session: str = Cookie(None), directory: s
                     <tbody id={directorydata}</tbody>
                 </table>
             </div>
+	        <!-- Adsterra Banner Ad -->
+    <div class="adsterra-banner">
+        <script type="text/javascript">
+            atOptions = {{
+                'key' : '220e60862df77eca071b576151e413d1',
+                'format' : 'iframe',
+                'height' : 300,
+                'width' : 160,
+                'params' : {{}}
+            }};
+        </script>
+        <script type="text/javascript" src="//www.highperformanceformat.com/220e60862df77eca071b576151e413d1/invoke.js"></script>
+    </div>
+    <!-- End of Adsterra Banner Ad -->
         </div>
     </div>
     <!-- Footer Start -->
@@ -536,16 +552,7 @@ async def SHARE_LINK(request: Request, session: str = Cookie(None), directory: s
         </div>
     </footer>
     <!-- Footer End -->
-        <script type="text/javascript">
-	atOptions = {{
-		'key' : '220e60862df77eca071b576151e413d1',
-		'format' : 'iframe',
-		'height' : 300,
-		'width' : 160,
-		'params' : {{}}
-	}};
-</script>
-<script type="text/javascript" src="//www.highperformanceformat.com/220e60862df77eca071b576151e413d1/invoke.js"></script>
+
     <script src="static/js/fileClickHandler.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Snowstorm/20131208/snowstorm-min.js"></script>
     <script>
