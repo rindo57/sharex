@@ -816,7 +816,7 @@ async def generate_link_page(request: Request):
       </form>
     </div>
     <div class="thank-you" id="thankYouMessage">
-      <p>Thank you! for downloading, if you like please consider supporting us <a href="https://hi-drive.ddlserverv1.me.in/donate" target="_blank">here</a>.</p>
+      <p>Happy Downloading!, if you like please consider supporting us <a href="https://hi-drive.ddlserverv1.me.in/donate" target="_blank">here</a></p>
     </div>
   </div>
   <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
@@ -830,9 +830,7 @@ async def generate_link_page(request: Request):
         event.preventDefault();
         alert("Please complete the CAPTCHA verification.");
       }} else {{
-        setTimeout(() => {{
-          document.getElementById("thankYouMessage").style.display = "block";
-        }}, 1000);
+        document.getElementById("thankYouMessage").style.display = "block";
       }}
     }});
   </script>
