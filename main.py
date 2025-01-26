@@ -806,53 +806,39 @@ async def generate_link_page(request: Request):
     </div>
 
     <!-- CAPTCHA Form Section -->
-    <div class="captcha-container">
+
+      <div class="captcha-container">
       <form id="verificationForm" action="/verify-turnstile" method="POST">
-        <input type="hidden" name="download_path" value={download_path}>
+       <input type="hidden" name="download_path" value={download_path}>
         <input type="hidden" id="cf_turnstile_response" name="cf_turnstile_response" value="">
         <div class="cf-turnstile" data-sitekey="0x4AAAAAAAzlMk1oTy9AbPV5" data-callback="setTurnstileResponse"></div>
         <button type="submit" id="downloadButton">Continue to Download Link</button>
       </form>
     </div>
+    <div class="thank-you" id="thankYouMessage">
+      <p>Thank you! for downloading, if you like please consider supporting us <a href="https://hi-drive.ddlserverv1.me.in/donate" target="_blank">here</a>.</p>
+    </div>
   </div>
-
   <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
   <script>
-    // Ripple effect on button click
-    const button = document.getElementById("downloadButton");
-
-    button.addEventListener("click", function (e) {{
-      const existingRipple = button.querySelector(".ripple");
-      if (existingRipple) existingRipple.remove();
-
-      const rect = button.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-
-      const ripple = document.createElement("span");
-      ripple.className = "ripple";
-      ripple.style.left = `${{x}}px`;
-      ripple.style.top = `${{y}}px`;
-      button.appendChild(ripple);
-
-      ripple.addEventListener("animationend", () => ripple.remove());
-    }});
-
-    // CAPTCHA token handling
     function setTurnstileResponse(token) {{
       document.getElementById('cf_turnstile_response').value = token;
     }}
-
     document.getElementById("verificationForm").addEventListener("submit", function (event) {{
       const token = document.getElementById('cf_turnstile_response').value;
       if (!token) {{
         event.preventDefault();
         alert("Please complete the CAPTCHA verification.");
+      }} else {{
+        setTimeout(() => {{
+          document.getElementById("thankYouMessage").style.display = "block";
+        }}, 1000);
       }}
     }});
   </script>
 </body>
 </html>
+
 """)
 
 @app.get("/donate", response_class=HTMLResponse)
