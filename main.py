@@ -766,7 +766,21 @@ async def generate_link_page(request: Request):
     .captcha-container {{
       text-align: center;
     }}
-  </style>
+
+    /* Add new style for thank-you message */
+    .thank-you {{
+      display: none;
+      color: #fff;
+      margin-top: 1rem;
+      text-align: center;
+      animation: fadeIn 0.5s ease-in;
+    }}
+
+    @keyframes fadeIn {{
+      from {{ opacity: 0; }}
+      to {{ opacity: 1; }}
+    }}
+</style>
 </head>
 <body>
   <div class="container">
@@ -815,24 +829,32 @@ async def generate_link_page(request: Request):
         <button type="submit" id="downloadButton">Continue to Download Link</button>
       </form>
     </div>
-    <div class="thank-you" id="thankYouMessage">
-      <p>Happy Downloading!, if you like please consider supporting us <a href="https://hi-drive.ddlserverv1.me.in/donate" target="_blank">here</a></p>
-    </div>
+      <div id="thankYouMessage" class="thank-you">
+        Thank you! for downloading, if you like the service please consider supporting us 
+        <a href="https://hi-drive.ddlserverv1.me.in/donate" style="color: #ff79c6;">here</a>
+      </div>
   </div>
   <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
   <script>
     function setTurnstileResponse(token) {{
       document.getElementById('cf_turnstile_response').value = token;
     }}
-    document.getElementById("verificationForm").addEventListener("submit", function (event) {{
+	document.getElementById("verificationForm").addEventListener("submit", function (event) {{
       const token = document.getElementById('cf_turnstile_response').value;
       if (!token) {{
         event.preventDefault();
         alert("Please complete the CAPTCHA verification.");
       }} else {{
+        // Show thank you message when form is submitted
         document.getElementById("thankYouMessage").style.display = "block";
+        
+        // Optional: Scroll to the message if it's not visible
+        document.getElementById("thankYouMessage").scrollIntoView({{
+          behavior: 'smooth'
+        }});
       }}
     }});
+
   </script>
 </body>
 </html>
