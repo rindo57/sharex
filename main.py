@@ -1004,7 +1004,7 @@ async def donatex(request: Request):
       padding: 20px;
       border-radius: 12px;
       box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.5);
-      max-width: 5000px;
+      max-width: 600px;
       text-align: center;
     }}
 
