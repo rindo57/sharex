@@ -1021,7 +1021,7 @@ async def donatex(request: Request):
 
     .crypto-section h2 {{
       font-size: 1.5rem;
-      margin-bottom: 1rem;
+      margin-bottom:1rem;
       color: #ff79c6;
     }}
 
@@ -1072,40 +1072,101 @@ async def donatex(request: Request):
     .crypto-details span {{
       margin-right: 10px;
     }}
+   /* New QR modal styles */
+    .qr-modal {{
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }}
+
+    .qr-content {{
+      background: #2c2c44;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      position: relative;
+    }}
+
+    .qr-content img {{
+      max-width: 300px;
+      height: auto;
+      margin: 15px 0;
+    }}
+
+    .close-button {{
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #ff4757;
+      border: none;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 14px;
+    }}    
+    .donation-iframe {{
+      margin: 1rem auto;
+      display: block;
+    }}
+
+    .button-group {{
+      display: flex;
+      gap: 10px;
+      margin-top: 0px;
+    }}
   </style>
 </head>
 <body>
   <div class="donation-container">
     <h1>Donate via Cryptocurrency</h1>
+    <span></span>
     <div class="crypto-section">
-      <h2>Cryptocurrency Addresses</h2>
+      <iframe src="https://trocador.app/anonpay/?ticker_to=btc&network_to=Mainnet&address=bc1qjqsc9fg9jagwfkn2kr6sed0stdh5lk7t27t4us&donation=True&simple_mode=True&name=&buttonbgcolor=ff79c6&bgcolor=" 
+              class="donation-iframe"
+              width="300" 
+              height="250" 
+              style="border:0" 
+              scrolling="no"></iframe>
 
+      <!-- Bitcoin -->
       <div class="crypto-address">
         <div class="crypto-details">
-          <img src="https://cryptologos.cc/logos/bitcoin-btc-logo.png" alt="Bitcoin Logo" class="crypto-icon">
-          <span>BTC:</span>
-          <span>1FfmbHfnpaZjKFvyi1okTjJJusN455paPH</span>
+          <img src="https://cryptologos.cc/logos/bitcoin-btc-logo.png" alt="Bitcoin" class="crypto-icon">
+          <span>BTC</span>
         </div>
-        <button class="copy-button" onclick="copyToClipboard('1FfmbHfnpaZjKFvyi1okTjJJusN455paPH')">Copy</button>
+        <div class="button-group">
+          <button class="copy-button" onclick="copyToClipboard('bc1qjqsc9fg9jagwfkn2kr6sed0stdh5lk7t27t4us')">Copy</button>
+          <button class="copy-button" onclick="showQR('static/assets/btc.png')">View QR</button>
+        </div>
       </div>
 
+      <!-- Monero -->
       <div class="crypto-address">
         <div class="crypto-details">
-          <img src="https://cryptologos.cc/logos/solana-sol-logo.png" alt="Solana Logo" class="crypto-icon">
-          <span>SOL:</span>
-          <span>BZfzENYjrCTSrw2MgviQeaKkrgmtdQZqJ3E5U95EC9Xd</span>
+          <img src="https://cryptologos.cc/logos/monero-xmr-logo.png?v=002" alt="Monero" class="crypto-icon">
+          <span>XMR</span>
         </div>
-        <button class="copy-button" onclick="copyToClipboard('6Yg1eidNWs9qhLwj3AkLGH7UTPrCFKSsh1ze2y1RU8GV')">Copy</button>
+        <div class="button-group">
+          <button class="copy-button" onclick="copyToClipboard('8AM87AgFbgu19PTyE8iBtoUvmpZ9gTV6BTJsf8RgxtMSTTMJvebt2EsgvhpMcw1TMWZGREEiG5r4HR4gddL39Lm8777FQr1')">Copy</button>
+          <button class="copy-button" onclick="showQR('static/assets/monero.png')">View QR</button>
+        </div>
       </div>
+    </div>
+  </div>
 
-      <div class="crypto-address">
-        <div class="crypto-details">
-          <img src="https://cryptologos.cc/logos/toncoin-ton-logo.svg?v=040" alt="TON Logo" class="crypto-icon">
-          <span>TON:</span>
-          <span>Ef8Nb7157K5bVxNKAvIWreRcF0RcUlzcCA7lwmewWVNtqM3s</span>
-        </div>
-        <button class="copy-button" onclick="copyToClipboard('Ef8Nb7157K5bVxNKAvIWreRcF0RcUlzcCA7lwmewWVNtqM3s')">Copy</button>
-      </div>
+  <!-- QR Modal -->
+  <div class="qr-modal" id="qrModal">
+    <div class="qr-content">
+      <button class="close-button" onclick="hideQR()">&times;</button>
+      <img id="qrImage" src="" alt="QR Code">
     </div>
   </div>
 
@@ -1117,7 +1178,27 @@ async def donatex(request: Request):
         alert('Failed to copy address.');
       }});
     }}
+
+    function showQR(imageUrl) {{
+      const modal = document.getElementById('qrModal');
+      const qrImage = document.getElementById('qrImage');
+      qrImage.src = imageUrl;
+      modal.style.display = 'flex';
+    }}
+
+    function hideQR() {{
+      document.getElementById('qrModal').style.display = 'none';
+    }}
+
+    // Close modal when clicking outside
+    window.onclick = function(event) {{
+      const modal = document.getElementById('qrModal');
+      if (event.target === modal) {{
+        hideQR();
+      }}
+    }};
   </script>
+  <!-- Cloudflare script remains unchanged -->
 </body>
 </html>
 """)
