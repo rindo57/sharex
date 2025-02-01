@@ -85,6 +85,8 @@ def get_country_code_from_language(lang_code):
     return lang_code  # Return the language code as-is if no mapping exists
 
 #### Piracy.moe Start ####
+def json_encode(string):
+    return json.dumps(string, separators=(',', ':')).encode()
 def compress(data):
     compressor = zlib.compressobj(wbits=-zlib.MAX_WBITS)
     return compressor.compress(data) + compressor.flush()
@@ -400,9 +402,7 @@ async def start_file_uploader(file_path, id, directory_path, filename, file_size
     if filename.endswith(".mkv"):
         media_details = format_media_info(file_path, file_size)
         content = f"Media Info:\n\n{media_details}"
-        print(content)
         api_key = "mZPtsfP1kPALQDyF56Qk1_exO1dIkWcR"  # Replace with your actual API key
-        print("just testying")
         paste_url = create_private_bin_post(f"""Media Info:\n\n{media_details}""")
         print("The pastebin URL is:", paste_url)
         rentry_link = get_rentry_link(content)
