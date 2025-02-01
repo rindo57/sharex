@@ -165,35 +165,34 @@ class PrivateBin:
                 'expire': self._expiration
             }
         }
-
     def create_post(self):
         session = requests.Session()
         self.__encrypt()
+        print("Encrypted data:", json.dumps(self._data, indent=4))  # Debugging line
         result = session.post(
             url=self._server,
-            headers={
-                'X-Requested-With': 'JSONHttpRequest'
-            },
-            proxies={},
+            headers={'X-Requested-With': 'JSONHttpRequest'},
             data=json_encode(self._data).decode()
         )
+        print("HTTP Response Code:", result.status_code)
+        print("HTTP Response Body:", result.text)
 
         try:
             response = result.json()
-
-            link = "{}?{}#{}".format(self._server,
-                                     response['id'],
-                                     self.__get_hash())
-
+            link = "{}?{}#{}".format(self._server, response['id'], self.__get_hash())
             return link
         except:
-            print(traceback.format_exc())
+            print(traceback.format_exc())  # Print exact error
             print("Error creating paste")
+
 
 
 def create_private_bin_post(message):
     private_bin_instance = PrivateBin(message)
-    return private_bin_instance.create_post()
+    paste_link = private_bin_instance.create_post()
+    print("Generated paste URL:", paste_link)  # Debugging line
+    return paste_link
+
 #### Piracy.moe ENd ####
 def get_media_language_info(file_path):
     """
