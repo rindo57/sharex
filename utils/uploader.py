@@ -402,7 +402,7 @@ async def start_file_uploader(file_path, id, directory_path, filename, file_size
         content = f"Media Info:\n\n{media_details}"
         print(content)
         api_key = "mZPtsfP1kPALQDyF56Qk1_exO1dIkWcR"  # Replace with your actual API key
-        primt("just testying")
+        print("just testying")
         paste_url = create_private_bin_post(f"""Media Info:\n\n{media_details}""")
         print("The pastebin URL is:", paste_url)
         rentry_link = get_rentry_link(content)
