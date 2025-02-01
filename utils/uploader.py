@@ -19,6 +19,15 @@ import re
 import subprocess
 import pycountry
 from utils.humanFunctions import humanBitrate, humanSize, remove_N
+
+import traceback
+import zlib
+from Crypto.Cipher import AES
+from Crypto.Hash import HMAC, SHA256
+from Crypto.Protocol.KDF import PBKDF2
+from Crypto.Random import get_random_bytes
+from base58 import b58encode
+from base64 import b64encode
 logger = Logger(__name__)
 PROGRESS_CACHE = {}
 STOP_TRANSMISSION = []
@@ -75,7 +84,117 @@ def get_country_code_from_language(lang_code):
 
     return lang_code  # Return the language code as-is if no mapping exists
 
+#### Piracy.moe Start ####
+def compress(data):
+    compressor = zlib.compressobj(wbits=-zlib.MAX_WBITS)
+    return compressor.compress(data) + compressor.flush()
 
+
+def initialize_cipher(key, iv, adata, tagsize):
+    cipher = AES.new(key, AES.MODE_GCM, nonce=iv, mac_len=tagsize)
+    cipher.update(json_encode(adata))
+    return cipher
+
+
+class PrivateBin:
+    def __init__(self, message):
+        self._server = "https://piracy.moe"
+        self._version = 2
+        self._compression = 'zlib'
+        self._data = ''
+        self._password = ''
+        self._formatter = 'plaintext'
+        self._message = message
+        self._expiration = "never"
+        self._discussion = False
+        self._burn_after_reading = False
+        self._iteration_count = 100000
+        self._salt_bytes = 8
+        self._block_bits = 256
+        self._tag_bits = 128
+        self._key = get_random_bytes(int(self._block_bits / 8))
+
+    def __get_hash(self):
+        return b58encode(self._key).decode()
+
+    def __derive_key(self, salt):
+        return PBKDF2(
+            self._key + self._password.encode(),
+            salt,
+            dkLen=int(self._block_bits / 8),
+            count=self._iteration_count,
+            prf=lambda password, salt: HMAC.new(
+                password,
+                salt,
+                SHA256
+            ).digest())
+
+    def __encrypt(self):
+        iv = get_random_bytes(int(self._tag_bits / 8))
+        salt = get_random_bytes(self._salt_bytes)
+        key = self.__derive_key(salt)
+
+        adata = [
+            [
+                b64encode(iv).decode(),
+                b64encode(salt).decode(),
+                self._iteration_count,
+                self._block_bits,
+                self._tag_bits,
+                'aes',
+                'gcm',
+                self._compression
+            ],
+            self._formatter,
+            int(self._discussion),
+            int(self._burn_after_reading)
+        ]
+
+        cipher_message = {
+            'paste': self._message
+        }
+
+        cipher = initialize_cipher(key, iv, adata, int(self._tag_bits / 8))
+        cipher_text, tag = cipher.encrypt_and_digest(compress(json_encode(cipher_message)))
+
+        self._data = {
+            'v': 2,
+            'adata': adata,
+            'ct': b64encode(cipher_text + tag).decode(),
+            'meta': {
+                'expire': self._expiration
+            }
+        }
+
+    def create_post(self):
+        session = requests.Session()
+        self.__encrypt()
+        result = session.post(
+            url=self._server,
+            headers={
+                'X-Requested-With': 'JSONHttpRequest'
+            },
+            proxies={},
+            data=json_encode(self._data).decode()
+        )
+
+        try:
+            response = result.json()
+
+            link = "{}?{}#{}".format(self._server,
+                                     response['id'],
+                                     self.__get_hash())
+
+            return link
+        except:
+            print(traceback.format_exc())
+            print("Error creating paste")
+
+
+def create_private_bin_post(message):
+    private_bin_instance = PrivateBin(message)
+    return private_bin_instance.create_post()
+#### Piracy.moe ENd ####
 def get_media_language_info(file_path):
     """
     Extracts audio and subtitle language information from a media file using mediainfo.
@@ -283,8 +402,7 @@ async def start_file_uploader(file_path, id, directory_path, filename, file_size
         media_details = format_media_info(file_path, file_size)
         content = f"Media Info:\n\n{media_details}"
         api_key = "mZPtsfP1kPALQDyF56Qk1_exO1dIkWcR"  # Replace with your actual API key
-        
-        paste_url = create_paste(api_key, content)
+        paste_url = create_private_bin_post(content)
         print("The pastebin URL is:", paste_url)
         rentry_link = get_rentry_link(content)
         print(rentry_link)
@@ -306,7 +424,7 @@ async def start_file_uploader(file_path, id, directory_path, filename, file_size
         media_details = format_media_info(file_path, file_size)
         content = f"Media Info:\n\n{media_details}"
         api_key = "mZPtsfP1kPALQDyF56Qk1_exO1dIkWcR"  # Replace with your actual API key
-        paste_url = create_paste(api_key, content)
+        paste_url = create_private_bin_post(content)
         print("The pastebin URL is:", paste_url)
         rentry_link = get_rentry_link(content)
         print(rentry_link)
