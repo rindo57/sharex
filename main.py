@@ -1129,7 +1129,7 @@ async def donatex(request: Request):
     <h1>Donate via Cryptocurrency</h1>
     <span></span>
     <div class="crypto-section">
-      <iframe src="https://trocador.app/anonpay/?ticker_to=btc&network_to=Mainnet&address=bc1qjqsc9fg9jagwfkn2kr6sed0stdh5lk7t27t4us&donation=True&simple_mode=True&name=&buttonbgcolor=ff79c6&bgcolor=" 
+      <iframe src="https://trocador.app/en/anonpay/?ticker_to=xmr&network_to=Mainnet&address=89vJLMFV5A1gyVoyP7X9WHN7jT3VkqepiBjZdAAKHXK3UiCmo7RXnRP2TLZMKbJ4vVLg3FSTnWGD5bzstHRuovN8MuWRxqa&donation=True&name=&buttonbgcolor=ff79c6&bgcolor=" 
               class="donation-iframe"
               width="300" 
               height="250" 
@@ -1143,7 +1143,7 @@ async def donatex(request: Request):
           <span>BTC</span>
         </div>
         <div class="button-group">
-          <button class="copy-button" onclick="copyToClipboard('bc1qjqsc9fg9jagwfkn2kr6sed0stdh5lk7t27t4us')">Copy</button>
+          <button class="copy-button" onclick="copyToClipboard('bc1qjqsc9fg9jagwfkn2kr6sed0stdh5lk7t27t4us', 'BTC')">Copy</button>
           <button class="copy-button" onclick="showQR('static/assets/btc.png')">View QR</button>
         </div>
       </div>
@@ -1155,13 +1155,12 @@ async def donatex(request: Request):
           <span>XMR</span>
         </div>
         <div class="button-group">
-          <button class="copy-button" onclick="copyToClipboard('8AM87AgFbgu19PTyE8iBtoUvmpZ9gTV6BTJsf8RgxtMSTTMJvebt2EsgvhpMcw1TMWZGREEiG5r4HR4gddL39Lm8777FQr1')">Copy</button>
+          <button class="copy-button" onclick="copyToClipboard('8AM87AgFbgu19PTyE8iBtoUvmpZ9gTV6BTJsf8RgxtMSTTMJvebt2EsgvhpMcw1TMWZGREEiG5r4HR4gddL39Lm8777FQr1', 'XMR')">Copy</button>
           <button class="copy-button" onclick="showQR('static/assets/monero.png')">View QR</button>
         </div>
       </div>
     </div>
   </div>
-
   <!-- QR Modal -->
   <div class="qr-modal" id="qrModal">
     <div class="qr-content">
@@ -1170,10 +1169,10 @@ async def donatex(request: Request):
     </div>
   </div>
 
-  <script>
-    function copyToClipboard(text) {{
+<script>
+    function copyToClipboard(text, currency) {{
       navigator.clipboard.writeText(text).then(() => {{
-        alert('Address copied to clipboard!');
+        alert(`${{currency}} address copied to clipboard!`);
       }}, () => {{
         alert('Failed to copy address.');
       }});
