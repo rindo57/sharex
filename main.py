@@ -1072,7 +1072,8 @@ async def donatex(request: Request):
     .crypto-details span {{
       margin-right: 10px;
     }}
-   /* New QR modal styles */
+
+    /* QR Modal styles */
     .qr-modal {{
       display: none;
       position: fixed;
@@ -1094,10 +1095,41 @@ async def donatex(request: Request):
       position: relative;
     }}
 
+.qr-header {{
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}}
+
+.qr-info {{
+  display: flex;
+  align-items: center;
+  gap: 6px; /* Controls space between logo and text */
+  background: #2c2c44;
+  padding: 6px 12px;
+  border-radius: 8px;
+}}
+
+.qr-info img {{
+  width: 28px;
+  height: 28px;
+  display: block;
+}}
+
+.qr-info span {{
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #ff79c6;
+  display: flex;
+  align-items: center;
+}}
+
+
+
     .qr-content img {{
       max-width: 300px;
       height: auto;
-      margin: 15px 0;
+      margin: 0 auto;
     }}
 
     .close-button {{
@@ -1144,7 +1176,7 @@ async def donatex(request: Request):
         </div>
         <div class="button-group">
           <button class="copy-button" onclick="copyToClipboard('bc1qjqsc9fg9jagwfkn2kr6sed0stdh5lk7t27t4us', 'BTC')">Copy</button>
-          <button class="copy-button" onclick="showQR('static/assets/btc.png')">View QR</button>
+          <button class="copy-button" onclick="showQR('static/assets/btc.png', 'BTC', 'https://cryptologos.cc/logos/bitcoin-btc-logo.png')">View QR</button>
         </div>
       </div>
 
@@ -1156,20 +1188,28 @@ async def donatex(request: Request):
         </div>
         <div class="button-group">
           <button class="copy-button" onclick="copyToClipboard('8AM87AgFbgu19PTyE8iBtoUvmpZ9gTV6BTJsf8RgxtMSTTMJvebt2EsgvhpMcw1TMWZGREEiG5r4HR4gddL39Lm8777FQr1', 'XMR')">Copy</button>
-          <button class="copy-button" onclick="showQR('static/assets/monero.png')">View QR</button>
+          <button class="copy-button" onclick="showQR('static/assets/monero.png', 'XMR', 'https://cryptologos.cc/logos/monero-xmr-logo.png?v=002')">View QR</button>
         </div>
       </div>
     </div>
   </div>
+
   <!-- QR Modal -->
+  
   <div class="qr-modal" id="qrModal">
     <div class="qr-content">
       <button class="close-button" onclick="hideQR()">&times;</button>
-      <img id="qrImage" src="" alt="QR Code">
+<div class="qr-header">
+  <div class="qr-info">
+    <img id="qrLogo" src="" alt="Crypto Logo">
+    <span id="qrCurrency"></span>
+  </div>
+</div>
+<img id="qrImage" src="" alt="QR Code">
     </div>
   </div>
 
-<script>
+  <script>
     function copyToClipboard(text, currency) {{
       navigator.clipboard.writeText(text).then(() => {{
         alert(`${{currency}} address copied to clipboard!`);
@@ -1178,10 +1218,15 @@ async def donatex(request: Request):
       }});
     }}
 
-    function showQR(imageUrl) {{
+    function showQR(imageUrl, currency, logoUrl) {{
       const modal = document.getElementById('qrModal');
       const qrImage = document.getElementById('qrImage');
+      const qrLogo = document.getElementById('qrLogo');
+      const qrCurrency = document.getElementById('qrCurrency');
+
       qrImage.src = imageUrl;
+      qrLogo.src = logoUrl;
+      qrCurrency.textContent = currency;
       modal.style.display = 'flex';
     }}
 
@@ -1197,7 +1242,6 @@ async def donatex(request: Request):
       }}
     }};
   </script>
-  <!-- Cloudflare script remains unchanged -->
 </body>
 </html>
 """)
