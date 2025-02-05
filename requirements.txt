@@ -12,3 +12,6 @@ pycountry
 pymediainfo
 pycryptodome
 base58
+requests
+bs4
+pymongo
