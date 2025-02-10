@@ -154,11 +154,7 @@ async def start_handler(client: Client, message: Message):
     await message.reply_text(START_CMD)
 
 
-@main_bot.on_message(
-    filters.command("set_folder")
-    & filters.private
-    & filters.user(config.TELEGRAM_ADMIN_IDS),
-)
+
 
 def get_media_language_info(file_path):
     """
@@ -219,7 +215,12 @@ def get_media_language_info(file_path):
     except subprocess.CalledProcessError as e:
         print(f"Error running mediainfo: {e.stderr.decode('utf-8')}")
         return {}
-        
+
+@main_bot.on_message(
+    filters.command("set_folder")
+    & filters.private
+    & filters.user(config.TELEGRAM_ADMIN_IDS),
+)
 async def set_folder_handler(client: Client, message: Message):
     global SET_FOLDER_PATH_CACHE, DRIVE_DATA
 
