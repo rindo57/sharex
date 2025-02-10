@@ -478,7 +478,7 @@ async def SHARE_LINK(request: Request, session: str = Cookie(None), directory: s
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AniDL Drive</title>
+    <title>H!-Drive</title>
     <link rel="icon" href="https://i.kek.sh/VmxAh7g4wD1.png" type="image/png">
     <link rel="stylesheet" href="static/home.css" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
@@ -869,6 +869,7 @@ async def donate(request: Request):
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="https://i.kek.sh/VmxAh7g4wD1.png" type="image/png">
   <title>Support Anime Encoding</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
@@ -983,6 +984,7 @@ async def donatex(request: Request):
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="https://i.kek.sh/VmxAh7g4wD1.png" type="image/png">
   <title>Cryptocurrency Donations</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
