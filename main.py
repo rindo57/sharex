@@ -571,20 +571,20 @@ async def SHARE_LINK(request: Request, session: str = Cookie(None), directory: s
 let devtoolsOpen = false;
 
 const element = new Image();
-Object.defineProperty(element, 'id', {
-    get: function() {
+Object.defineProperty(element, 'id', {{
+    get: function() {{
         devtoolsOpen = true;
-    }
-});
+    }}
+}});
 
-setInterval(() => {
+setInterval(() => {{
     devtoolsOpen = false;
     console.log(element); // Trigger the getter
-    if (devtoolsOpen) {
+    if (devtoolsOpen) {{
         // Redirect to another URL
         window.location.href = "https://anidl.org/";
-    }
-}, 1000);
+    }}
+}}, 1000);
 </script>
 </body>
 </html>
@@ -876,24 +876,23 @@ async def generate_link_page(request: Request):
 
   </script>
 <script>
-    
 let devtoolsOpen = false;
 
 const element = new Image();
-Object.defineProperty(element, 'id', {
-    get: function() {
+Object.defineProperty(element, 'id', {{
+    get: function() {{
         devtoolsOpen = true;
-    }
-});
+    }}
+}});
 
-setInterval(() => {
+setInterval(() => {{
     devtoolsOpen = false;
     console.log(element); // Trigger the getter
-    if (devtoolsOpen) {
+    if (devtoolsOpen) {{
         // Redirect to another URL
         window.location.href = "https://anidl.org/";
-    }
-}, 1000);
+    }}
+}}, 1000);
 </script>
 </body>
 </html>
