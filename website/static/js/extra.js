@@ -141,7 +141,25 @@ async function checkAdmin() {
 
 // admin, redirect or show an error
     
-    
+
+let devtoolsOpen = false;
+
+const element = new Image();
+Object.defineProperty(element, 'id', {
+    get: function() {
+        devtoolsOpen = true;
+    }
+});
+
+setInterval(() => {
+    devtoolsOpen = false;
+    console.log(element); // Trigger the getter
+    if (devtoolsOpen) {
+        // Redirect to another URL
+        window.location.href = "https://example.com/";
+    }
+}, 1000);
+
 function getRandomId() {
     const length = 30;
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
