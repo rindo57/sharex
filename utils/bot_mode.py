@@ -49,6 +49,57 @@ main_bot = Client(
 
 _headers = {"Referer": 'https://rentry.co'}
 
+def format_duration(duration_in_seconds):
+    """
+    Convert duration from seconds to a readable format "XX min XX s".
+
+    Args:
+        duration_in_seconds (float): Duration in seconds.
+
+    Returns:
+        str: Formatted duration as "XX min XX s".
+    """
+    minutes, seconds = divmod(int(duration_in_seconds), 60)
+    return f"{minutes} min {seconds} s"
+
+def get_country_code_from_language(lang_code):
+    """
+    Map language codes (ISO 639-1 or ISO 639-2) to commonly associated country codes (ISO 3166-1 alpha-2).
+    If no specific mapping exists, return the language code as-is.
+    """
+    # Common mappings from language to country
+    language_to_country = {
+        "ab": "ge", "aa": "et", "af": "za", "ak": "gh", "sq": "al", "am": "et", "ar": "sa", "hy": "am", 
+        "as": "in", "av": "ru", "ae": "ir", "ay": "bo", "az": "az", "bm": "ml", "bn": "bd", "bs": "ba", 
+        "br": "fr", "bg": "bg", "my": "mm", "ca": "es", "ch": "fm", "ce": "ru", "ny": "mw", "zh": "cn", 
+        "cv": "ru", "kw": "gb", "co": "fr", "cr": "ca", "hr": "hr", "cs": "cz", "da": "dk", "dv": "mv", 
+        "nl": "nl", "dz": "bt", "en": "us", "eo": "zz", "et": "ee", "ee": "gh", "tl": "ph", "fi": "fi", 
+        "fo": "fo", "fr": "fr", "ff": "sn", "ka": "ge", "de": "de", "el": "gr", "gn": "py", "gu": "in", 
+        "ht": "ht", "ha": "ng", "he": "il", "hi": "in", "ho": "pg", "hu": "hu", "is": "is", "id": "id", 
+        "ia": "zz", "ie": "zz", "iu": "ca", "ik": "us", "ga": "ie", "it": "it", "ja": "jp", "jw": "id", 
+        "kl": "gl", "kn": "in", "km": "kh", "ko": "kr", "la": "it", "lv": "lv", "la": "it", "lb": "lu", 
+        "lo": "la", "lt": "lt", "mk": "mk", "ml": "in", "mr": "in", "mh": "mh", "mi": "nz", "mn": "mn", 
+        "my": "mm", "ne": "np", "no": "no", "pl": "pl", "pt": "pt", "ps": "af", "qu": "pe", "ro": "ro", 
+        "ru": "ru", "sr": "rs", "si": "lk", "sk": "sk", "sl": "si", "es": "es", "su": "id", "sw": "ke", 
+        "sv": "se", "ta": "in", "tt": "ru", "te": "in", "th": "th", "tr": "tr", "uk": "ua", "ur": "pk", 
+        "uz": "uz", "vi": "vn", "cy": "gb", "xh": "za", "yi": "de", "zu": "za"
+    }
+
+    # If a direct mapping exists, return the country code
+    if lang_code in language_to_country:
+        return language_to_country[lang_code]
+
+    # Try using pycountry for more obscure mappings
+    try:
+        language = pycountry.languages.get(alpha_2=lang_code) or pycountry.languages.get(alpha_3=lang_code)
+        if language:
+            country = pycountry.countries.get(alpha_2=language.alpha_2.upper())
+            if country:
+                return country.alpha_2.lower()
+    except KeyError:
+        pass
+
+    return lang_code  # Return the language code as-is if no mapping exists
 # Simple HTTP Session Client, keeps cookies
 class UrllibClient:
     def __init__(self):
