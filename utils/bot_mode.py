@@ -358,7 +358,7 @@ async def file_handler(client: Client, message: Message):
         rentry_link = get_rentry_link(content)
         paste_url = create_private_bin_post(f"""Media Info:\n\n{content}""")
         # Send the file back as a document
-        infox = get_media_language_info(file_path)
+        infox = get_media_language_info(fileName)
         audio = infox.get("audio_languages")
         print("Audio Languages:", infox.get("audio_languages"))
         subtitle = infox.get("subtitle_languages")
