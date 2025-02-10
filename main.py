@@ -566,8 +566,27 @@ async def SHARE_LINK(request: Request, session: str = Cookie(None), directory: s
         snowStorm.excludeMobile = 0;
         snowStorm.zIndex = 9999;
     </script>
-</body>
+    <script>
+    
+let devtoolsOpen = false;
 
+const element = new Image();
+Object.defineProperty(element, 'id', {
+    get: function() {
+        devtoolsOpen = true;
+    }
+});
+
+setInterval(() => {
+    devtoolsOpen = false;
+    console.log(element); // Trigger the getter
+    if (devtoolsOpen) {
+        // Redirect to another URL
+        window.location.href = "https://anidl.org/";
+    }
+}, 1000);
+</script>
+</body>
 </html>
 """)
 @app.get("/f", response_class=HTMLResponse)
@@ -856,6 +875,26 @@ async def generate_link_page(request: Request):
     }});
 
   </script>
+<script>
+    
+let devtoolsOpen = false;
+
+const element = new Image();
+Object.defineProperty(element, 'id', {
+    get: function() {
+        devtoolsOpen = true;
+    }
+});
+
+setInterval(() => {
+    devtoolsOpen = false;
+    console.log(element); // Trigger the getter
+    if (devtoolsOpen) {
+        // Redirect to another URL
+        window.location.href = "https://anidl.org/";
+    }
+}, 1000);
+</script>
 </body>
 </html>
 
