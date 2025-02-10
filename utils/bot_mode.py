@@ -16,6 +16,7 @@ import json
 import re
 import subprocess
 from utils.humanFunctions import humanBitrate, humanSize, remove_N
+from utils.uploader import create_private_bin_post
 logger = Logger(__name__)
 
 START_CMD = """🚀 **Welcome To AniDL Drive's Bot Mode**
@@ -107,6 +108,67 @@ async def start_handler(client: Client, message: Message):
     & filters.private
     & filters.user(config.TELEGRAM_ADMIN_IDS),
 )
+
+def get_media_language_info(file_path):
+    """
+    Extracts audio and subtitle language information from a media file using mediainfo.
+
+    Args:
+        file_path (str): Path to the media file.
+
+    Returns:
+        dict: Dictionary with audio and subtitle language info.
+    """
+    cmd = [
+        "mediainfo",
+        "--Output=JSON",
+        file_path
+    ]
+
+    try:
+        result = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True)
+        metadata = json.loads(result.stdout)
+
+        audio_languages = []
+        subtitle_languages = []
+        video_resolution = None
+        video_codec = None
+        video_bit_depth = None
+        duration = None
+        # Navigate through the JSON structure to find audio and subtitle tracks
+        for track in metadata.get("media", {}).get("track", []):
+            if track.get("@type") == "Audio":
+                language = track.get("Language", "unknown")
+                country_code = get_country_code_from_language(language)
+                audio_languages.append(country_code)
+                
+            elif track.get("@type") == "Text":
+                language = track.get("Language", "unknown")
+                country_code = get_country_code_from_language(language)
+                subtitle_languages.append(country_code)
+            elif track.get("@type") == "Video":
+                video_resolution = track.get("Width", "unknown") + "x" + track.get("Height", "unknown")
+                video_codec = track.get("Format", "unknown")
+                video_bit_depth = track.get("BitDepth", "unknown")
+
+                # Format the duration into "XX min XX s"
+                duration = track.get("Duration", "unknown")
+                if duration != "unknown":
+                    duration = format_duration(float(duration))
+
+        return {
+            "audio_languages": audio_languages,
+            "subtitle_languages": subtitle_languages,
+            "video_resolution": video_resolution,
+            "video_codec": video_codec,
+            "video_bit_depth": video_bit_depth,
+            "duration": duration
+        }
+
+    except subprocess.CalledProcessError as e:
+        print(f"Error running mediainfo: {e.stderr.decode('utf-8')}")
+        return {}
+        
 async def set_folder_handler(client: Client, message: Message):
     global SET_FOLDER_PATH_CACHE, DRIVE_DATA
 
@@ -294,9 +356,21 @@ async def file_handler(client: Client, message: Message):
         content = boom.read()
         print(content)
         rentry_link = get_rentry_link(content)
+        paste_url = create_private_bin_post(f"""Media Info:\n\n{content}""")
         # Send the file back as a document
-        print("Telegram file Mediainfo sent", flush=True)
-        copied_message = await message.copy(config.STORAGE_CHANNEL)
+        infox = get_media_language_info(file_path)
+        audio = infox.get("audio_languages")
+        print("Audio Languages:", infox.get("audio_languages"))
+        subtitle = infox.get("subtitle_languages")
+        print("Subtitle Languages:", infox.get("subtitle_languages"))
+        resolution = infox.get("video_resolution")
+        print("Video Resolution:", infox.get("video_resolution"))
+        codec = infox.get("video_codec")
+        print("Video Codec:", infox.get("video_codec"))
+        bit_depth = infox.get("video_bit_depth")
+        print("Video Bit Depth:", infox.get("video_bit_depth"))
+        duration = infox.get("duration")
+        print("Duration:", infox.get("duration"))
         file = (
             copied_message.document
             or copied_message.video
@@ -311,11 +385,18 @@ async def file_handler(client: Client, message: Message):
             copied_message.id,
             file.file_size,
             rentry_link,
-            uploader
+            paste_url,
+            uploader,
+            audio, 
+            subtitle, 
+            resolution, 
+            codec, 
+            bit_depth, 
+            duration
         )
 
         await message.reply_text(
-            f"""✅ File Uploaded Successfully To Your TG Drive Website
+            f"""✅ File Uploaded Successfully To Your H!-Drive Website
                              
     **File Name:** {file.file_name}
     **Folder:** {BOT_MODE.current_folder_name}
@@ -348,7 +429,14 @@ async def file_handler(client: Client, message: Message):
         copied_message.id,
         file.file_size,
         rentry_link,
-        uploader
+        paste_url,
+        uploader,
+        audio, 
+        subtitle, 
+        resolution, 
+        codec, 
+        bit_depth, 
+        duration
     )
 
     await message.reply_text(
