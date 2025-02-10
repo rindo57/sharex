@@ -22,7 +22,7 @@ function showDirectory(data) {
             
             // Only add the "More" button and options if the path does NOT start with /share
             if (!isShare) {
-                html += `<td><div class="td-align"><a data-id="${item.id}" class="more-btn"><span class="glyphicon glyphicon-option-vertical" style="color:#ff79c6"></span></a></div></td>
+                html += `<td><div class="td-align"><a data-id="${item.id}" class="more-btn"><img src="static/assets/more-icon.svg" </a></div></td>
                          </tr>`;
                 
                 if (isTrash) {
