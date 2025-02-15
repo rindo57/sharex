@@ -16,3 +16,4 @@ requests
 bs4
 pymongo
 motor
+cryptography
