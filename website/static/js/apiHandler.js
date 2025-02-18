@@ -281,15 +281,17 @@ function renderPendingUploadList() {
 
 
     // Show or hide the "Pending Uploads" heading and list based on whether there are pending files
-    if (pendingFiles.length > 0) {
-        pendingHeading.style.display = 'block'; // Show the heading if there are pending files
-        pendingFilesList.style.display = 'block'; // Show the pending uploads list
-        pendingUploadListContainer.style.border = '1px solid #ccc'; // Show the border
-    } else {
-        pendingFilesList.style.display = pendingFiles.length > 0 ? 'block' : 'none';
-        pendingHeading.style.display = pendingFiles.length > 0 ? 'block' : 'none';// Hide the pending uploads list
-        pendingUploadListContainer.style.border = 'none'; // Hide the border
-    }
+// Ensure list stays visible if there are remaining files
+if (uploadQueue.length > 0) {
+    pendingHeading.style.display = 'block';
+    pendingFilesList.style.display = 'block';
+    pendingUploadListContainer.style.border = '1px solid #ccc';
+} else {
+    pendingHeading.style.display = 'none';
+    pendingFilesList.style.display = 'none';
+    pendingUploadListContainer.style.border = 'none';
+}
+
 
     pendingFiles.forEach(file => {
         const listItem = document.createElement('li');
@@ -320,12 +322,13 @@ function renderPendingUploadList() {
 }
 
 function removeFile(fileToRemove) {
-    // Remove the file from the upload queue
-    uploadQueue = uploadQueue.filter(file => file.name !== fileToRemove.name);
+    // Remove only the selected file from the queue
+    uploadQueue = uploadQueue.filter(file => file !== fileToRemove);
 
-    // Explicitly re-render the pending list to reflect changes immediately
+    // Re-render the pending upload list immediately
     renderPendingUploadList();
 }
+
 
 
 
