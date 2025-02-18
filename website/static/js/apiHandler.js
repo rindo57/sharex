@@ -275,7 +275,8 @@ function renderPendingUploadList() {
     pendingFilesList.innerHTML = '';
 
     // Filter the queue to exclude the current uploading file
-    const pendingFiles = [...uploadQueue]; // Use a copy of the queue without filtering out currentUploadingFile
+    const pendingFiles = uploadQueue.slice();
+ // Use a copy of the queue without filtering out currentUploadingFile
 
 
     // Show or hide the "Pending Uploads" heading and list based on whether there are pending files
@@ -318,18 +319,12 @@ function renderPendingUploadList() {
 }
 
 function removeFile(fileToRemove) {
-    // Find index of the file to remove
-    const index = uploadQueue.findIndex(file => file.name === fileToRemove.name);
-    
-    if (index !== -1) {
-        // Remove the file from the queue
-        uploadQueue.splice(index, 1);
-    }
+    // Remove only the selected file from the queue
+    uploadQueue = uploadQueue.filter(file => file.name !== fileToRemove.name);
 
-    // Re-render the pending upload list
+    // Re-render the pending upload list properly
     renderPendingUploadList();
 }
-
 
 
 
