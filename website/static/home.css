@@ -464,8 +464,9 @@ body {
     margin-top: 15px;
     border-collapse: collapse;
     background-color: black;
-    border-radius: 10px;
+    border-radius: 5px;
     overflow: hidden;
+   /* 0 0px 10px 1px #ff1493 */
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
 }
 
