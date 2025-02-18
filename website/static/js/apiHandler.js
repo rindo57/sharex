@@ -472,7 +472,7 @@ async function handleUpload2(id) {
 // URL Uploader Start
 
 let remoteUploadQueue = []; // Queue for remote URL uploads
-let activeRemoteUploads = 1; // Counter for active remote uploads
+let activeRemoteUploads = 0; // Counter for active remote uploads
 const maxRemoteConcurrentUploads = 1; // Limit concurrent remote uploads to 1
 let currentUploadingRemoteFile = null; // Track the file being uploaded from URL
 
@@ -643,7 +643,7 @@ function removeFile(fileToRemove) {
 }
 
 async function download_progress_updater({ file_urlx, file_name, file_size, singleThreaded=true}) {
-    activeRemoteUploads++;
+    
     document.getElementById('upload-filename').innerText = 'Filename: ' + file_name;
     document.getElementById('upload-filesize').innerText = 'Filesize: ' + (file_size / (1024 * 1024)).toFixed(2) + ' MB';
     document.getElementById('upload-status').innerText = 'Status: Downloading File From Url To Backend Server';
@@ -670,6 +670,7 @@ async function download_progress_updater({ file_urlx, file_name, file_size, sing
             uploadPercent.innerText = 'Progress : 100%'
             progressBar.style.width = '100%';
             await handleUpload3(id)
+            activeRemoteUploads++;
         } else {
             const current = data[1];
             const total = data[2];
