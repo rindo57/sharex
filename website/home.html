@@ -105,10 +105,16 @@
             <div class="progress">
                 <div class="progress-bar" id="progress-bar"></div>
             </div>
+            <div id="Pending-upload-list" class="pending-upload-list" style="max-height: 200px; overflow-y: auto; border: 1px solid #ccc; padding: 10px;">
+                <h3 id="pending-heading" style="display: none;">⏳ Pending Uploads:</h3> <!-- Initially hidden -->
+                <ul id="pending-files" style="list-style-type: none; padding: 0; margin: 0; display: none;"></ul> <!-- Initially hidden and no padding/margin -->
+            </div>
+
             <div class="btn-div">
                 <button id="cancel-file-upload">Cancel Upload</button>
             </div>
         </div>
+
         <!-- File Uploader End -->
 
         <!-- Main Content Start -->
