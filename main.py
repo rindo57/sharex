@@ -528,20 +528,6 @@ async def SHARE_LINK(request: Request, session: str = Cookie(None), directory: s
                     <tbody id={directorydata}</tbody>
                 </table>
             </div>
-	        <!-- Adsterra Banner Ad -->
-    <div class="adsterra-banner">
-        <script type="text/javascript">
-            atOptions = {{
-                'key' : '220e60862df77eca071b576151e413d1',
-                'format' : 'iframe',
-                'height' : 300,
-                'width' : 160,
-                'params' : {{}}
-            }};
-        </script>
-        <script type="text/javascript" src="//www.highperformanceformat.com/220e60862df77eca071b576151e413d1/invoke.js"></script>
-    </div>
-    <!-- End of Adsterra Banner Ad -->
         </div>
     </div>
     <!-- Footer Start -->
