@@ -272,46 +272,60 @@ function renderPendingUploadList() {
     const pendingHeading = document.getElementById('pending-heading');
     const pendingUploadListContainer = document.getElementById('Pending-upload-list');
 
-    // Clear old list
+    // Clear previous list
     pendingFilesList.innerHTML = '';
 
-    // ✅ Keep the list visible if files are still in queue OR a file is currently uploading
-    if (uploadQueue.length > 0 || currentUploadingFile) {
-        pendingHeading.style.display = 'block';
-        pendingFilesList.style.display = 'block';
-        pendingUploadListContainer.style.display = 'block'; // Ensure visibility
-        pendingUploadListContainer.style.border = '1px solid #ccc';
+    // Filter the queue to exclude the current uploading file
+    const pendingFiles = uploadQueue.filter(file => file !== currentUploadingFile);
+
+    // Show or hide the "Pending Uploads" heading and list based on whether there are pending files
+    if (pendingFiles.length > 0) {
+        pendingHeading.style.display = 'block'; // Show the heading if there are pending files
+        pendingFilesList.style.display = 'block'; // Show the pending uploads list
+        pendingUploadListContainer.style.border = '1px solid #ccc'; // Show the border
     } else {
-        pendingHeading.style.display = 'none';
-        pendingFilesList.style.display = 'none';
-        pendingUploadListContainer.style.display = 'none'; // Hide only if empty
+        pendingHeading.style.display = 'none'; // Hide the heading if no pending files
+        pendingFilesList.style.display = 'none'; // Hide the pending uploads list
+        pendingUploadListContainer.style.border = 'none'; // Hide the border
     }
 
-    uploadQueue.forEach(file => {
+    pendingFiles.forEach(file => {
         const listItem = document.createElement('li');
-        listItem.style.display = 'flex';
-        listItem.style.justifyContent = 'space-between';
-        listItem.style.alignItems = 'center';
-        listItem.style.marginBottom = '5px';
+        listItem.style.display = 'flex'; // Use flexbox for inline items
+        listItem.style.justifyContent = 'space-between'; // Spread items across the row
+        listItem.style.alignItems = 'center'; // Vertically align items in the center
+        listItem.style.marginBottom = '5px'; // Add margin between items
+        listItem.style.flexWrap = 'nowrap'; // Prevent line breaks for the elements
 
         const fileNameSpan = document.createElement('span');
-        fileNameSpan.textContent = `📁 ${file.name}`;
-        fileNameSpan.style.flexGrow = '1';
-        fileNameSpan.style.marginRight = '10px';
-        fileNameSpan.style.overflow = 'hidden';
-        fileNameSpan.style.textOverflow = 'ellipsis';
-        fileNameSpan.style.whiteSpace = 'nowrap';
-        fileNameSpan.style.maxWidth = '250px';
+        fileNameSpan.textContent = `📁 ${file.name}`; // Prepend the emoji to the filename
+        fileNameSpan.style.overflow = 'hidden'; // Ensure long names don't overflow
+        fileNameSpan.style.textOverflow = 'ellipsis'; // Add ellipsis for long names
+        fileNameSpan.style.whiteSpace = 'nowrap'; // Prevent filename from wrapping
+        fileNameSpan.style.flexGrow = '1'; // Ensure the filename takes the remaining space
+        fileNameSpan.style.marginRight = '10px'; // Add some spacing between filename and remove button
+        fileNameSpan.style.maxWidth = '300px'; // Set a fixed width where ellipsis will kick in
 
+        // Create a remove button
         const removeButton = document.createElement('button');
         removeButton.textContent = '❌';
-        removeButton.onclick = () => removeFile(file);
+        removeButton.onclick = () => removeFilex(file); // Bind the remove function to the button
 
-        listItem.appendChild(fileNameSpan);
-        listItem.appendChild(removeButton);
-        pendingFilesList.appendChild(listItem);
+        listItem.appendChild(fileNameSpan); // Add the filename span to the list item
+        listItem.appendChild(removeButton); // Add the remove button inline with the filename
+        pendingFilesList.appendChild(listItem); // Add the list item to the pending files list
     });
 }
+
+function removeFilex(fileToRemove) {
+    // Remove the file from the upload queue
+    uploadQueue = uploadQueue.filter(file => file.name !== fileToRemove.name);
+
+    // Re-render the pending upload list
+    renderPendingUploadList();
+
+}
+
 
 
 async function uploadFile(file) {
