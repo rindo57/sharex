@@ -313,13 +313,6 @@ function renderPendingUploadList() {
     });
 }
 
-function removeFile(fileToRemove) {
-    // Remove only the selected file from the queue
-    uploadQueue = uploadQueue.filter(file => file !== fileToRemove);
-
-    // Re-render the pending upload list immediately
-    renderPendingUploadList();
-}
 
 async function uploadFile(file) {
     const CHUNK_SIZE = 50 * 1024 * 1024; // 50 MB
