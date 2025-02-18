@@ -224,6 +224,7 @@ async function getFolderShareAuth(path) {
 }
 
 // File Uploader Start
+// File Uploader Start
 const MAX_FILE_SIZE = 2126008811.52; // Will be replaced by the python
 
 const fileInput = document.getElementById('fileInput');
@@ -263,7 +264,10 @@ function processUploadQueue() {
         window.location.reload();
     }
 
-    renderPendingUploadList(); // Update pending list whenever queue changes
+    // Only render the pending list if there are files in the queue
+    if (uploadQueue.length > 0) {
+        renderPendingUploadList();
+    }
 }
 
 function renderPendingUploadList() {
@@ -319,12 +323,6 @@ function removeFile(fileToRemove) {
     // Re-render the pending upload list immediately
     renderPendingUploadList();
 }
-
-
-
-
-
-
 
 async function uploadFile(file) {
     const CHUNK_SIZE = 50 * 1024 * 1024; // 50 MB
