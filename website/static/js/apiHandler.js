@@ -264,10 +264,7 @@ function processUploadQueue() {
         window.location.reload();
     }
 
-    // Only render the pending list if there are files in the queue
-    if (uploadQueue.length > 0) {
-        renderPendingUploadList();
-    }
+    renderPendingUploadList(); // Update pending list whenever queue changes
 }
 
 function renderPendingUploadList() {
@@ -278,8 +275,8 @@ function renderPendingUploadList() {
     // Clear old list
     pendingFilesList.innerHTML = '';
 
-    // ✅ Keep the list visible if files are still in queue
-    if (uploadQueue.length > 0) {
+    // ✅ Keep the list visible if files are still in queue OR a file is currently uploading
+    if (uploadQueue.length > 0 || currentUploadingFile) {
         pendingHeading.style.display = 'block';
         pendingFilesList.style.display = 'block';
         pendingUploadListContainer.style.display = 'block'; // Ensure visibility
@@ -398,6 +395,8 @@ async function uploadFile(file) {
     }
 
     activeUploads--;
+    currentUploadingFile = null; // clear current uploading file
+
     processUploadQueue();
 
     //alert("Upload completed successfully!");
@@ -446,7 +445,6 @@ async function handleUpload2(id) {
     const interval = setInterval(async () => {
         const response = await postJson('/api/getUploadProgress', { 'id': id });
         const data = response['data'];
-
         if (data[0] === 'running') {
             const current = data[1];
             const total = data[2];
@@ -474,7 +472,7 @@ async function handleUpload2(id) {
 // URL Uploader Start
 
 let remoteUploadQueue = []; // Queue for remote URL uploads
-let activeRemoteUploads = 0; // Counter for active remote uploads
+let activeRemoteUploads = 1; // Counter for active remote uploads
 const maxRemoteConcurrentUploads = 1; // Limit concurrent remote uploads to 1
 let currentUploadingRemoteFile = null; // Track the file being uploaded from URL
 
