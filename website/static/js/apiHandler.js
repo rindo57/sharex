@@ -275,7 +275,8 @@ function renderPendingUploadList() {
     pendingFilesList.innerHTML = '';
 
     // Filter the queue to exclude the current uploading file
-    const pendingFiles = uploadQueue.slice();
+    const pendingFiles = [...uploadQueue]; // Use a copy of the queue without filtering out currentUploadingFile
+
  // Use a copy of the queue without filtering out currentUploadingFile
 
 
@@ -285,8 +286,8 @@ function renderPendingUploadList() {
         pendingFilesList.style.display = 'block'; // Show the pending uploads list
         pendingUploadListContainer.style.border = '1px solid #ccc'; // Show the border
     } else {
-        pendingHeading.style.display = 'none'; // Hide the heading if no pending files
-        pendingFilesList.style.display = 'none'; // Hide the pending uploads list
+        pendingFilesList.style.display = pendingFiles.length > 0 ? 'block' : 'none';
+        pendingHeading.style.display = pendingFiles.length > 0 ? 'block' : 'none';// Hide the pending uploads list
         pendingUploadListContainer.style.border = 'none'; // Hide the border
     }
 
@@ -319,12 +320,13 @@ function renderPendingUploadList() {
 }
 
 function removeFile(fileToRemove) {
-    // Remove only the selected file from the queue
+    // Remove the file from the upload queue
     uploadQueue = uploadQueue.filter(file => file.name !== fileToRemove.name);
 
-    // Re-render the pending upload list properly
+    // Explicitly re-render the pending list to reflect changes immediately
     renderPendingUploadList();
 }
+
 
 
 
