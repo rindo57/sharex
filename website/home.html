@@ -96,24 +96,28 @@
             </div>
         </div>
         <!-- File U ploader Start -->
-        <div id="file-uploader" class="file-uploader">
-            <span class="upload-head">🚀 Uploading File...</span>
-            <span id="upload-filename" class="upload-info">Filename : </span>
-            <span id="upload-filesize" class="upload-info">Filesize :</span>
-            <span id="upload-status" class="upload-info">Status : </span>
-            <span id="upload-percent" class="upload-info">Progress : </span>
-            <div class="progress">
-                <div class="progress-bar" id="progress-bar"></div>
-            </div>
-            <div id="Pending-upload-list" class="pending-upload-list" style="max-height: 200px; overflow-y: auto; border: 1px solid #ccc; padding: 10px;">
-                <h3 id="pending-heading" style="display: none;">⏳ Pending Uploads:</h3> <!-- Initially hidden -->
-                <ul id="pending-files" style="list-style-type: none; padding: 0; margin: 0; display: none;"></ul> <!-- Initially hidden and no padding/margin -->
-            </div>
+<div id="file-uploader" class="file-uploader">
+    <span class="upload-head">🚀 Uploading File...</span>
+    <span id="upload-filename" class="upload-info">Filename : </span>
+    <span id="upload-filesize" class="upload-info">Filesize :</span>
+    <span id="upload-status" class="upload-info">Status : </span>
+    <span id="upload-percent" class="upload-info">Progress : </span>
+    
+    <div class="progress">
+        <div class="progress-bar" id="progress-bar"></div>
+    </div>
+    
+    <!-- Pending Upload List (No `display: none;` here) -->
+    <div id="Pending-upload-list" class="pending-upload-list" style="max-height: 200px; overflow-y: auto; border: 1px solid #ccc; padding: 10px;">
+        <h3 id="pending-heading">⏳ Pending Uploads:</h3> <!-- Visible by default, controlled by JS -->
+        <ul id="pending-files" style="list-style-type: none; padding: 0; margin: 0;"></ul> <!-- No `display: none;` -->
+    </div>
 
-            <div class="btn-div">
-                <button id="cancel-file-upload">Cancel Upload</button>
-            </div>
-        </div>
+    <div class="btn-div">
+        <button id="cancel-file-upload">Cancel Upload</button>
+    </div>
+</div>
+<!-- File Uploader End -->
 
         <!-- File Uploader End -->
 
