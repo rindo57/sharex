@@ -318,11 +318,10 @@ function renderPendingUploadList() {
 
 function removeFile(fileToRemove) {
     // Remove the file from the upload queue
-    uploadQueue = uploadQueue.filter(file => file.name !== fileToRemove.name);
+    uploadQueue = uploadQueue.filter(file => file !== fileToRemove);
 
     // Re-render the pending upload list
     renderPendingUploadList();
-
 }
 
 
