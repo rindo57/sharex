@@ -271,53 +271,44 @@ function renderPendingUploadList() {
     const pendingHeading = document.getElementById('pending-heading');
     const pendingUploadListContainer = document.getElementById('Pending-upload-list');
 
-    // Clear previous list
+    // Clear old list
     pendingFilesList.innerHTML = '';
 
-    // Filter the queue to exclude the current uploading file
-    const pendingFiles = [...uploadQueue]; // Use a copy of the queue without filtering out currentUploadingFile
+    // ✅ Keep the list visible if files are still in queue
+    if (uploadQueue.length > 0) {
+        pendingHeading.style.display = 'block';
+        pendingFilesList.style.display = 'block';
+        pendingUploadListContainer.style.display = 'block'; // Ensure visibility
+        pendingUploadListContainer.style.border = '1px solid #ccc';
+    } else {
+        pendingHeading.style.display = 'none';
+        pendingFilesList.style.display = 'none';
+        pendingUploadListContainer.style.display = 'none'; // Hide only if empty
+    }
 
- // Use a copy of the queue without filtering out currentUploadingFile
-
-
-    // Show or hide the "Pending Uploads" heading and list based on whether there are pending files
-// Ensure list stays visible if there are remaining files
-if (uploadQueue.length > 0) {
-    pendingHeading.style.display = 'block';
-    pendingFilesList.style.display = 'block';
-    pendingUploadListContainer.style.border = '1px solid #ccc';
-} else {
-    pendingHeading.style.display = 'none';
-    pendingFilesList.style.display = 'none';
-    pendingUploadListContainer.style.border = 'none';
-}
-
-
-    pendingFiles.forEach(file => {
+    uploadQueue.forEach(file => {
         const listItem = document.createElement('li');
-        listItem.style.display = 'flex'; // Use flexbox for inline items
-        listItem.style.justifyContent = 'space-between'; // Spread items across the row
-        listItem.style.alignItems = 'center'; // Vertically align items in the center
-        listItem.style.marginBottom = '5px'; // Add margin between items
-        listItem.style.flexWrap = 'nowrap'; // Prevent line breaks for the elements
+        listItem.style.display = 'flex';
+        listItem.style.justifyContent = 'space-between';
+        listItem.style.alignItems = 'center';
+        listItem.style.marginBottom = '5px';
 
         const fileNameSpan = document.createElement('span');
-        fileNameSpan.textContent = `📁 ${file.name}`; // Prepend the emoji to the filename
-        fileNameSpan.style.overflow = 'hidden'; // Ensure long names don't overflow
-        fileNameSpan.style.textOverflow = 'ellipsis'; // Add ellipsis for long names
-        fileNameSpan.style.whiteSpace = 'nowrap'; // Prevent filename from wrapping
-        fileNameSpan.style.flexGrow = '1'; // Ensure the filename takes the remaining space
-        fileNameSpan.style.marginRight = '10px'; // Add some spacing between filename and remove button
-        fileNameSpan.style.maxWidth = '300px'; // Set a fixed width where ellipsis will kick in
+        fileNameSpan.textContent = `📁 ${file.name}`;
+        fileNameSpan.style.flexGrow = '1';
+        fileNameSpan.style.marginRight = '10px';
+        fileNameSpan.style.overflow = 'hidden';
+        fileNameSpan.style.textOverflow = 'ellipsis';
+        fileNameSpan.style.whiteSpace = 'nowrap';
+        fileNameSpan.style.maxWidth = '250px';
 
-        // Create a remove button
         const removeButton = document.createElement('button');
         removeButton.textContent = '❌';
-        removeButton.onclick = () => removeFile(file); // Bind the remove function to the button
+        removeButton.onclick = () => removeFile(file);
 
-        listItem.appendChild(fileNameSpan); // Add the filename span to the list item
-        listItem.appendChild(removeButton); // Add the remove button inline with the filename
-        pendingFilesList.appendChild(listItem); // Add the list item to the pending files list
+        listItem.appendChild(fileNameSpan);
+        listItem.appendChild(removeButton);
+        pendingFilesList.appendChild(listItem);
     });
 }
 
